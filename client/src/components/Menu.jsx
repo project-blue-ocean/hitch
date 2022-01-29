@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function Navbar() {
+function Menu() {
   return (
     <nav>
       <h3>Logo</h3>
@@ -15,14 +15,8 @@ function Navbar() {
         <Link to="/messages">
           <li>Messages</li>
         </Link>
-        <Link to="/search-rides">
-          <li>Search rides</li>
-        </Link>
         <Link to="/post-ride">
           <li>Post a ride</li>
-        </Link>
-        <Link to="/pending-requests">
-          <li>Pending requests</li>
         </Link>
         <Link to="/login">
           <li>Logout</li>
@@ -32,4 +26,4 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+export default Menu;
