@@ -6,7 +6,7 @@ function Navbar() {
     <nav>
       <h3>Logo</h3>
       <u1 className="nav-links">
-      <Link to="/">
+        <Link to="/">
           <li>Home</li>
         </Link>
         <Link to="/my-profile">
