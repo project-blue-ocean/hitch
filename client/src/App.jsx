@@ -25,7 +25,7 @@ function App() {
 
 
 // TODO:
-// Move these placeholder components
+// Move placeholder components below
 // into components folder and start
 // building them out.
 
