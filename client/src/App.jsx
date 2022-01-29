@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import './App.css';
 import Navbar from './components/Navbar.jsx';
+import Login from './components/Login.jsx'
 
 function App() {
   return (
@@ -23,7 +24,6 @@ function App() {
   );
 }
 
-
 // TODO:
 // Move placeholder components below
 // into components folder and start
@@ -33,14 +33,6 @@ function Home() {
   return (
     <div>
       This is the Home view.
-    </div>
-  );
-}
-
-function Login() {
-  return (
-    <div>
-      This is the Login view.
     </div>
   );
 }
