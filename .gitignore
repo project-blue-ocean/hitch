@@ -1,0 +1,8 @@
+# Compiled Dir
+dist/
+
+# Dependency directory
+node_modules/
+
+# Config
+config.js
