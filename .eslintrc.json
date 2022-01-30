@@ -19,6 +19,16 @@
         "react"
     ],
     "rules": {
+
     },
-    "import/extensions": {"jsx": "always"}
+    "settings": {
+        "import/resolver": {
+          "node": {
+            "extensions": [
+              "js",
+              "jsx"
+            ]
+          }
+        }
+    }
 }
