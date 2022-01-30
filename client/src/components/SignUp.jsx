@@ -74,6 +74,7 @@ function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                required
                 id="date"
                 label="Birthday"
                 type="date"
