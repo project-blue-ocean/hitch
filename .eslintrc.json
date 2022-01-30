@@ -19,5 +19,6 @@
         "react"
     ],
     "rules": {
-    }
+    },
+    "import/extensions": {"jsx": "always"}
 }
