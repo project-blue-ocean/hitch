@@ -8,14 +8,14 @@ import {
   List,
   Fab,
 } from '@material-ui/core';
-import Button from '@mui/material/Button';
 import Message from './Message.jsx';
-import UserContacted from './UserContacted.jsx'
+import UserContacted from './UserContacted.jsx';
 import dummyData from '../../../messagesDummyData';
 
-function Messages({userId}) {
+function Messages({ userId }) {
   const [usersContacted, setUsersContacted] = useState(dummyData.usersContacted);
   const [messages, setMessages] = useState(dummyData.messages);
+  const [userContactedId, setUserContactedId] = useState(null);
 
   // const getUsersContacted = () => {
   //   return false;
@@ -25,40 +25,46 @@ function Messages({userId}) {
   //   return false;
   // };
 
+  const userContactedOnClick = (id) => {
+    setUserContactedId(id);
+  };
+
   return (
     <div>
       <Grid container component={Paper}>
-        <Grid item xs={3}>
+        <Grid item xs={3} style={{ borderRight: '1px solid #e0e0e0' }}>
           <List>
             {usersContacted.map((user) => (
-              <UserContacted user={user} />
+              <UserContacted user={user} userContactedOnClick={userContactedOnClick} />
             ))}
           </List>
         </Grid>
-        <Divider />
+        {userContactedId
+        && (
         <Grid item xs={9}>
           <List>
             {messages.map((message) => (
-              <Message message={message} />
+              <Message message={message} userId={userId} />
             ))}
           </List>
           <Divider />
-          <Grid container style={{padding: '20px'}}>
+          <Grid container style={{ padding: '20px' }}>
             <Grid item xs={11}>
-              <TextField id="outlined-basic-email" label="Type Something" fullWidth />
+              <TextField id="outlined-basic-email" fullWidth />
             </Grid>
             <Grid xs={1} align="right">
               <Fab color="primary" aria-label="add">Send</Fab>
             </Grid>
           </Grid>
         </Grid>
+        )}
       </Grid>
     </div>
   );
 }
 
-// Messages.propTypes = {
-//   userId: PropTypes.number.isRequired,
-// };
+Messages.propTypes = {
+  userId: PropTypes.number.isRequired,
+};
 
 export default Messages;

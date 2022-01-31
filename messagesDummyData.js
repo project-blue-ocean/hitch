@@ -1,7 +1,7 @@
 const dummyData = {
   usersContacted: [
     {
-      senderId: 88,
+      id: 88,
       senderName: 'Christopher McCandless',
     },
   ],

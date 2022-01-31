@@ -7,9 +7,9 @@ import {
   Avatar,
 } from '@material-ui/core';
 
-function UserContacted({ user }) {
+function UserContacted({ user, userContactedOnClick }) {
   return (
-    <ListItem button>
+    <ListItem button onClick={() => userContactedOnClick(user.id)}>
       <ListItemIcon>
         <Avatar alt={user.senderName} src="" />
       </ListItemIcon>
