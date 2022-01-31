@@ -5,16 +5,12 @@ import {
   Paper,
   Divider,
   TextField,
-  Typography,
   List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Avatar,
   Fab,
 } from '@material-ui/core';
 import Button from '@mui/material/Button';
 import Message from './Message.jsx';
+import UserContacted from './UserContacted.jsx'
 import dummyData from '../../../messagesDummyData';
 
 function Messages({userId}) {
@@ -35,12 +31,7 @@ function Messages({userId}) {
         <Grid item xs={3}>
           <List>
             {usersContacted.map((user) => (
-              <ListItem button>
-                <ListItemIcon>
-                  <Avatar alt={user.senderName} src="" />
-                </ListItemIcon>
-                <ListItemText primary={user.senderName}>{user.senderName}</ListItemText>
-              </ListItem>
+              <UserContacted user={user} />
             ))}
           </List>
         </Grid>
@@ -48,16 +39,7 @@ function Messages({userId}) {
         <Grid item xs={9}>
           <List>
             {messages.map((message) => (
-              <ListItem>
-                <Grid container>
-                  <Grid item xs={12}>
-                    <ListItemText align="right" primary={message.msg} />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <ListItemText align="right" secondary={message.time} />
-                  </Grid>
-                </Grid>
-              </ListItem>
+              <Message message={message} />
             ))}
           </List>
           <Divider />
