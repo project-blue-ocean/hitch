@@ -30,7 +30,6 @@ function PostRide({ userId }) {
       year: date.getFullYear(),
       price: data.get('price'),
     };
-    console.log(formToSend);
     navigate('/');
   };
   return (
@@ -67,7 +66,7 @@ function PostRide({ userId }) {
               </LocalizationProvider>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField required fullWidth id="price" label="Ride Price" name="price" autoComplete="price" />
+              <TextField required fullWidth type="number" min="0" id="price" label="Ride Price" name="price" />
             </Grid>
           </Grid>
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
