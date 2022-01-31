@@ -52,7 +52,6 @@ export default function ReviewModal({ handleClose, open, profile }) {
           sx={{
             '& .MuiTextField-root': { m: 1, width: '25ch' },
           }}
-          noValidate
           autoComplete="off"
           onSubmit={handleSubmit}
         >
