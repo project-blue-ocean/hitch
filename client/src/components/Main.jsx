@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -235,7 +236,9 @@ function Main() {
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
               <div>
                 <Avatar alt={profile.name} src={profile.image} />
-                {profile.name}
+                <Link to={`/profile/${profile.name}`}>
+                  {profile.name}
+                </Link>
               </div>
               <Rating name="rating" value={Number(profile.driverRating)} readOnly precision={0.5} />
               <div>message</div>
