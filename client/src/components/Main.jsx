@@ -7,6 +7,11 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
+import DetailsIcon from '@mui/icons-material/Sms';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 
 function Main() {
   const [rides, setRides] = useState([]);
@@ -37,8 +42,8 @@ function Main() {
   };
 
   const styles = {
-    width: '350px',
-    minWidth: '350px',
+    width: '380px',
+    minWidth: '380px',
     fontsize: '18px',
     margin: 'auto',
     paddingTop: '300px',
@@ -48,7 +53,8 @@ function Main() {
     <div className="search-page" style={styles}>
       {showRides ? (
         <div>
-          <button
+          <Button
+            variant="outlined"
             type="submit"
             onClick={() => {
               setShowRides(false);
@@ -59,14 +65,21 @@ function Main() {
             }}
           >
             Change Search
-          </button>
+          </Button>
 
           {rides.map((ride) => (
             <List
               sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
               key={ride.date + ride.driverId}
             >
-              <ListItem alignItems="flex-start">
+              <ListItem
+                alignItems="flex-start"
+                secondaryAction={(
+                  <IconButton>
+                    <DetailsIcon />
+                  </IconButton>
+                  )}
+              >
                 <ListItemText
                   primary={
                     (
@@ -77,7 +90,9 @@ function Main() {
                         color="text.primary"
                       >
                         {ride.origin}
+                        {' '}
                         to:
+                        {' '}
                         {ride.destination}
                       </Typography>
                     )
@@ -103,25 +118,38 @@ function Main() {
           ))}
         </div>
       ) : (
-        <form onSubmit={searchRides}>
-          <input
+        <Box
+          component="form"
+          sx={{
+            '& > :not(style)': { m: 1, width: '25ch' },
+          }}
+          noValidate
+          autoComplete="off"
+          onSubmit={searchRides}
+        >
+          <TextField
+            id="outlined-basic"
+            label="Ride From"
+            varient="Ride From"
             type="text"
             name="From"
-            placeholder="Ride From"
             onChange={updateSearch}
+            autoFocus
           />
-          <input
+          <TextField
+            id="outlined-basic"
+            label="Destination"
+            varient="Destination"
             type="text"
             name="Destination"
-            placeholder="Destination"
             onChange={updateSearch}
           />
-          <button type="submit" onClick={searchRides}>
+          <Button variant="outlined" type="submit" onClick={searchRides}>
             {' '}
             Go!
             {' '}
-          </button>
-        </form>
+          </Button>
+        </Box>
       )}
     </div>
   );
