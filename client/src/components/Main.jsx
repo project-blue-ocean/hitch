@@ -236,7 +236,7 @@ function Main() {
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
               <div>
                 <Avatar alt={profile.name} src={profile.image} />
-                <Link to={`/profile/${profile.name}`}>
+                <Link to={`/profile/${profile.userId}`}>
                   {profile.name}
                 </Link>
               </div>
