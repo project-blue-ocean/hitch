@@ -11,20 +11,23 @@ import PostRide from './components/PostRide.jsx';
 import Profile from './components/Profile.jsx';
 import SignUp from './components/SignUp.jsx';
 import Login from './components/Login.jsx';
+import { AuthProvider } from './contexts/index.jsx';
 
 function App() {
   return (
     <Router>
       <MenuOption />
-      <Routes>
-        <Route path="/" exact element={<Main />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/my-profile" element={<Profile />} />
-        <Route path="/messages" element={<Messages />} />
-        <Route path="/post-ride" element={<PostRide />} />
+      <AuthProvider>
+        <Routes>
+          <Route path="/" exact element={<Main />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/my-profile" element={<Profile />} />
+          <Route path="/messages" element={<Messages />} />
+          <Route path="/post-ride" element={<PostRide />} />
 
-      </Routes>
+        </Routes>
+      </AuthProvider>
     </Router>
   );
 }
