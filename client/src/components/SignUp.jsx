@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Alert from '@material-ui/core/Alert';
 // Authentication context
-import { useAuth, AuthContext } from '../contexts/index.jsx';
+import { AuthContext } from '../contexts/index.jsx';
 
 function SignUp() {
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ function SignUp() {
   const [isLoading, setLoading] = useState(false);
 
   // Context
-  const {signup} = useContext(AuthContext);
+  const { signup } = useContext(AuthContext);
 
   // Methods
   const onChange = (e) => {
@@ -47,13 +47,12 @@ function SignUp() {
     }
     try {
       setLoading(true);
-      console.log(email,password)
       await signup(email, password)
         .then((userCredential) => {
           console.log('user cred', userCredential);
           const { user } = userCredential;
-          // TODO: add userCredential to context
-          // TODO: pass fname, lname, dob
+          // TODO: add firstName, lastName, dob, and profilePicture to database
+          // add userId to context
         })
         .catch((err) => {
           switch (err.code) {
