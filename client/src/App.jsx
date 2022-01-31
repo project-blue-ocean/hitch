@@ -25,8 +25,9 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/my-profile" element={<Profile />} />
-          <Route path="/messages" element={<Messages />} />
+          <Route path="/messages" element={<Messages userId={84} />} />
           <Route path="/post-ride" element={<PostRide />} />
+
         </Routes>
       </AuthProvider>
     </Router>
