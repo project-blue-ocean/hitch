@@ -10,7 +10,7 @@ import Messages from './components/Messages.jsx';
 import PostRide from './components/PostRide.jsx';
 import Profile from './components/Profile.jsx';
 import SignUp from './components/SignUp.jsx';
-import Login from './components/Login.jsx'
+import Login from './components/Login.jsx';
 
 function App() {
   return (
