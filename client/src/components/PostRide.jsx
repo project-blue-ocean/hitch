@@ -62,7 +62,7 @@ function PostRide({ userId }) {
             </Grid>
             <Grid item xs={12} sm={6}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DatePicker views={['year']} id="year" name="year" label="Year only" value={date} minDate={new Date('2012-03-01')} maxDate={new Date('2023-06-01')} onChange={(newValue) => setDate(newValue)} renderInput={(params) => <TextField {...params} helperText={null} />} />
+                <DatePicker views={['year']} id="year" name="year" label="Year only" value={date} minDate={new Date('1950-01-01')} maxDate={new Date('2023-02-01')} onChange={(newValue) => setDate(newValue)} renderInput={(params) => <TextField {...params} helperText={null} />} />
               </LocalizationProvider>
             </Grid>
             <Grid item xs={12} sm={6}>
