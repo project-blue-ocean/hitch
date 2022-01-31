@@ -86,6 +86,10 @@ function Main() {
   const mainStyle = {
     height: '100vh',
     backgroundImage: `url("${van}")`,
+    backgroundAttachment: 'fixed',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center center',
   };
 
   return (
@@ -105,7 +109,7 @@ function Main() {
             <div className="search-container" style={{ width: '100%' }}>
               <Button
                 sx={{ width: '50%' }}
-                variant="outlined"
+                variant="contained"
                 type="submit"
                 onClick={() => {
                   setShowRides(false);
@@ -199,23 +203,25 @@ function Main() {
               onSubmit={searchRides}
             >
               <TextField
-                id="outlined-basic"
+                sx={{ background: 'white', opacity: '.9', borderRadius: '6px' }}
+                id="filled-basic"
                 label="Ride From"
-                varient="Ride From"
+                varient="filled"
                 type="text"
                 name="From"
                 onChange={updateSearch}
                 autoFocus
               />
               <TextField
-                id="outlined-basic"
+                sx={{ background: 'white', opacity: '.9', borderRadius: '6px' }}
+                id="filled-basic"
                 label="Destination"
-                varient="Destination"
+                varient="filled"
                 type="text"
                 name="Destination"
                 onChange={updateSearch}
               />
-              <Button variant="outlined" type="submit" onClick={searchRides}>
+              <Button variant="contained" type="submit" onClick={searchRides}>
                 {' '}
                 Go!
                 {' '}
