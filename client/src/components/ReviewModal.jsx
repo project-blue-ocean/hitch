@@ -22,9 +22,16 @@ const style = {
 };
 
 export default function ReviewModal({ handleClose, open, profile }) {
+  const [value, setValue] = React.useState(0);
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(event)
+    const data = new FormData(event.currentTarget);
+    const feedback = data.get('feedback');
+    const rating = data.get('half-rating');
+    const rider = data.get('wasRider');
+    const driver = data.get('wasDriver');
+    const date = new Date();
+    console.log(feedback, rating, rider, driver, date);
     handleClose();
   };
   return (
@@ -58,13 +65,23 @@ export default function ReviewModal({ handleClose, open, profile }) {
             the rider or the driver?
           </div>
           <FormGroup aria-label="position" row required>
-            <FormControlLabel control={<Checkbox />} label="Rider" labelPlacement="top" />
-            <FormControlLabel control={<Checkbox />} label="Driver" labelPlacement="top" />
+            <FormControlLabel control={<Checkbox name="wasRider" />} label="Rider" labelPlacement="top" />
+            <FormControlLabel control={<Checkbox name="wasDriver" />} label="Driver" labelPlacement="top" />
           </FormGroup>
-          <Rating name="half-rating" defaultValue={0} precision={0.5} size="large" required />
+          <Rating
+            name="half-rating"
+            precision={0.5}
+            size="large"
+            valuse={value}
+            onChange={(event, newValue) => {
+              setValue(newValue);
+            }}
+            required
+          />
           <TextField
             id="outlined-multiline-static"
             label="Your feedback (optional)"
+            name="feedback"
             multiline
             rows={4}
             fullWidth
