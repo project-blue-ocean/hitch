@@ -28,8 +28,8 @@ function Login() {
     if (id === 'password') setPassword(value);
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       setLoading(true);
       await login(email, password)
