@@ -33,7 +33,16 @@ function Main() {
     <div>
       {showRides ? (
         <div>
-          <button type="submit" onClick={() => { setShowRides(false); }}>
+          <button
+            type="submit"
+            onClick={() => {
+              setShowRides(false);
+              setSearchTerm({
+                source: '',
+                destination: '',
+              });
+            }}
+          >
             Change Search
           </button>
 

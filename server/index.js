@@ -14,6 +14,7 @@ app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, '/../client/dist')));
 // Note: this wildcard route could cause issues for
 // axios requests sent from client-side
+
 app.get('/rides', (req, res) => {
   // ? dummy api call for fake data
   const search = JSON.parse(req.query.search);
@@ -30,7 +31,6 @@ app.get('/rides', (req, res) => {
       }
     }
   }
-  console.log(results);
   res.send(results);
 });
 
