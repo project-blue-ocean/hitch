@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   Grid,
@@ -25,6 +25,18 @@ function Messages({ userId }) {
   //   return false;
   // };
 
+  const messagesEndRef = React.useRef();
+
+  const scrollToBottom = () => {
+    messagesEndRef.current.scrollIntoView();
+  };
+
+  useEffect(() => {
+    if (userContactedId !== null) {
+      scrollToBottom();
+    }
+  }, [userContactedId]);
+
   const userContactedOnClick = (id) => {
     setUserContactedId(id);
   };
@@ -42,10 +54,11 @@ function Messages({ userId }) {
         {userContactedId
         && (
         <Grid item xs={9}>
-          <List>
+          <List style={{ height: '70vh', overflowY: 'auto' }}>
             {messages.map((message) => (
               <Message message={message} userId={userId} />
             ))}
+            <div ref={messagesEndRef} />
           </List>
           <Divider />
           <Grid container style={{ padding: '20px' }}>
