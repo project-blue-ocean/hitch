@@ -1,4 +1,4 @@
-exports.sampleData = [
+module.exports = [
   {
     origin: 'New York City, NY',
     destination: 'Austin, TX',

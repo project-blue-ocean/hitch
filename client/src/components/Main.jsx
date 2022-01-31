@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import sampleData from '../../../server/rideSamples.js';
 
 function Main() {
-  const [searchTerm, setSearchTerm] = useState({});
+  const [rides, setRides] = useState([]);
+  const [showRides, setShowRides] = useState(false);
+  const [searchTerm, setSearchTerm] = useState({
+    source: '',
+    destination: '',
+  });
 
   const updateSearch = (e) => {
     const { value } = e.target;
@@ -17,31 +21,56 @@ function Main() {
 
   const searchRides = async (e) => {
     e.preventDefault();
-    console.log(searchTerm);
-    axios.get('/rides', { params: { search: searchTerm } });
+    const response = await axios.get('/rides', { params: { search: searchTerm } });
+    const { data } = await response;
+    setRides(data);
+    if (data.length > 0) {
+      setShowRides(true);
+    }
   };
 
   return (
     <div>
-      <form onSubmit={searchRides}>
-        <input
-          type="text"
-          name="From"
-          placeholder="From"
-          onChange={updateSearch}
-        />
-        <input
-          type="text"
-          name="Destination"
-          placeholder="Destination"
-          onChange={updateSearch}
-        />
-        <button type="submit" onClick={searchRides}>
-          {' '}
-          Go!
-          {' '}
-        </button>
-      </form>
+      {showRides ? (
+        <div>
+          <button type="submit" onClick={() => { setShowRides(false); }}>
+            Change Search
+          </button>
+
+          {rides.map((ride) => (
+            <div key={ride.date + ride.driverId}>
+              {ride.origin}
+              {' '}
+              to:
+              {' '}
+              {ride.destination}
+              {' '}
+              $
+              {ride.price}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <form onSubmit={searchRides}>
+          <input
+            type="text"
+            name="From"
+            placeholder="Ride From"
+            onChange={updateSearch}
+          />
+          <input
+            type="text"
+            name="Destination"
+            placeholder="Destination"
+            onChange={updateSearch}
+          />
+          <button type="submit" onClick={searchRides}>
+            {' '}
+            Go!
+            {' '}
+          </button>
+        </form>
+      )}
     </div>
   );
 }
