@@ -17,8 +17,8 @@ import { AuthProvider } from './contexts/index.jsx';
 function App() {
   return (
     <Router>
-      <MenuOption />
       <AuthProvider>
+        <MenuOption />
         <Routes>
           {/* TODO: Wrap private pages in <PrivateRoute></PrivateRoute> */}
           <Route path="/" exact element={<Main />} />
