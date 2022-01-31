@@ -12,8 +12,13 @@ import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import Modal from '@mui/material/Modal';
+import Rating from '@mui/material/Rating';
 
 function Main() {
+  const [profile, setProfile] = useState({});
+  const [showDetails, setShowDetails] = useState(false);
   const [rides, setRides] = useState([]);
   const [showRides, setShowRides] = useState(false);
   const [searchTerm, setSearchTerm] = useState({
@@ -41,116 +46,183 @@ function Main() {
     }
   };
 
+  const getProfile = async (id) => {
+    const response = await axios.get('/profile', { params: { search: id } });
+    const { data } = await response;
+    setProfile(data);
+  };
+
+  const displayModal = (id) => {
+    getProfile(id);
+    setShowDetails(true);
+  };
+
+  const closeModal = () => {
+    setShowDetails(false);
+  };
+
+  const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
+
   const styles = {
-    width: '380px',
+    width: '50%',
     minWidth: '380px',
-    fontsize: '18px',
     margin: 'auto',
-    paddingTop: '300px',
+    paddingTop: '150px',
   };
 
   return (
-    <div className="search-page" style={styles}>
-      {showRides ? (
-        <div>
-          <Button
-            variant="outlined"
-            type="submit"
-            onClick={() => {
-              setShowRides(false);
-              setSearchTerm({
-                source: '',
-                destination: '',
-              });
-            }}
-          >
-            Change Search
-          </Button>
-
-          {rides.map((ride) => (
-            <List
-              sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-              key={ride.date + ride.driverId}
+    <div className="Title" style={{ margin: 'auto', width: '50%', textAlign: 'center' }}>
+      <h1> Hitch(not a dating app)</h1>
+      <div className="search-box" style={styles}>
+        {showRides ? (
+          <div className="search-container" style={{ width: '100%' }}>
+            <Button
+              sx={{ width: '50%' }}
+              variant="outlined"
+              type="submit"
+              onClick={() => {
+                setShowRides(false);
+                setSearchTerm({
+                  source: '',
+                  destination: '',
+                });
+              }}
             >
-              <ListItem
-                alignItems="flex-start"
-                secondaryAction={(
-                  <IconButton>
-                    <DetailsIcon />
-                  </IconButton>
-                  )}
+              Change Search
+            </Button>
+            {rides.map((ride) => (
+              <List
+                sx={{
+                  width: '100%',
+                  maxWidth: 360,
+                  bgcolor: 'background.paper',
+                  alignItems: 'center',
+                  margin: 'auto',
+                }}
+                key={ride.date + ride.driverId}
               >
-                <ListItemText
-                  primary={
-                    (
-                      <Typography
-                        sx={{ display: 'inline' }}
-                        component="span"
-                        variant="body2"
-                        color="text.primary"
-                      >
-                        {ride.origin}
-                        {' '}
-                        to:
-                        {' '}
-                        {ride.destination}
-                      </Typography>
-                    )
-                  }
-                  secondary={
-                    (
-                      <Typography
-                        sx={{ display: 'inline' }}
-                        component="span"
-                        variant="body2"
-                        color="text.primary"
-                      >
-                        {' '}
-                        $
-                        {ride.price}
-                      </Typography>
-                    )
-                  }
-                />
-              </ListItem>
-              <Divider variant="inset" component="li" />
-            </List>
-          ))}
-        </div>
-      ) : (
-        <Box
-          component="form"
-          sx={{
-            '& > :not(style)': { m: 1, width: '25ch' },
-          }}
-          noValidate
-          autoComplete="off"
-          onSubmit={searchRides}
-        >
-          <TextField
-            id="outlined-basic"
-            label="Ride From"
-            varient="Ride From"
-            type="text"
-            name="From"
-            onChange={updateSearch}
-            autoFocus
-          />
-          <TextField
-            id="outlined-basic"
-            label="Destination"
-            varient="Destination"
-            type="text"
-            name="Destination"
-            onChange={updateSearch}
-          />
-          <Button variant="outlined" type="submit" onClick={searchRides}>
-            {' '}
-            Go!
-            {' '}
-          </Button>
+                <ListItem
+                  alignItems="flex-start"
+                  secondaryAction={(
+                    <IconButton
+                      type="submit"
+                      onClick={() => {
+                        displayModal(ride.driverId);
+                      }}
+                    >
+                      <DetailsIcon />
+                    </IconButton>
+                    )}
+                >
+                  <ListItemText
+                    primary={
+                      (
+                        <Typography
+                          className="list-text"
+                          sx={{ display: 'inline', fontSize: '1.8rem' }}
+                          component="span"
+                          variant="body2"
+                          color="text.primary"
+                        >
+                          {ride.origin}
+                          {' '}
+                          <ArrowForwardIcon />
+                          {ride.destination}
+                        </Typography>
+                      )
+                    }
+                    secondary={
+                      (
+                        <Typography
+                          className="list-text-price"
+                          sx={{
+                            display: 'inline',
+                            fontSize: '1.3rem',
+                            color: '#4169E1',
+                            opacity: '.9',
+                            fontWeight: 'bold',
+                          }}
+                          component="span"
+                          variant="body2"
+                          color="text.primary"
+                        >
+                          {' '}
+                          $
+                          {ride.price}
+                        </Typography>
+                      )
+                    }
+                  />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+              </List>
+            ))}
+          </div>
+        ) : (
+          <Box
+            component="form"
+            sx={{
+              '& > :not(style)': { m: 1, width: '25ch' },
+            }}
+            noValidate
+            autoComplete="off"
+            onSubmit={searchRides}
+          >
+            <TextField
+              id="outlined-basic"
+              label="Ride From"
+              varient="Ride From"
+              type="text"
+              name="From"
+              onChange={updateSearch}
+              autoFocus
+            />
+            <TextField
+              id="outlined-basic"
+              label="Destination"
+              varient="Destination"
+              type="text"
+              name="Destination"
+              onChange={updateSearch}
+            />
+            <Button variant="outlined" type="submit" onClick={searchRides}>
+              {' '}
+              Go!
+              {' '}
+            </Button>
+          </Box>
+        )}
+      </div>
+      <Modal
+        open={showDetails}
+        onClose={closeModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={modalStyle}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Driver Details
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            <div>
+              <Avatar alt={profile.name} src={profile.image} />
+              {profile.name}
+            </div>
+            <Rating name="rating" value={Number(profile.driverRating)} readOnly precision={0.5} />
+            <div>message</div>
+          </Typography>
         </Box>
-      )}
+      </Modal>
     </div>
   );
 }

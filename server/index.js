@@ -3,6 +3,7 @@ const axios = require('axios');
 const morgan = require('morgan');
 const path = require('path');
 const dummy = require('./rideSamples.js');
+const fakeprofile = require('./profileSamples.js');
 
 const app = express();
 const config = require('../config');
@@ -32,6 +33,10 @@ app.get('/rides', (req, res) => {
     }
   }
   res.send(results);
+});
+
+app.get('/profile', (req, res) => {
+  res.send(fakeprofile);
 });
 
 app.get('*', (req, res) => {
