@@ -18,4 +18,10 @@ function UserContacted({ user, userContactedOnClick }) {
   );
 }
 
+UserContacted.propTypes = {
+  user: PropTypes.number.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  userContactedOnClick: PropTypes.object.isRequired,
+};
+
 export default UserContacted;

@@ -5,6 +5,7 @@ import {
   ListItem,
   ListItemText,
 } from '@material-ui/core';
+import Moment from 'moment';
 
 function Message({ message, userId }) {
   const alignOption = message.senderId === userId ? 'right' : 'left';
@@ -15,11 +16,17 @@ function Message({ message, userId }) {
           <ListItemText align={alignOption} primary={message.msg} />
         </Grid>
         <Grid item xs={12}>
-          <ListItemText align={alignOption} secondary={message.time} />
+          <ListItemText align={alignOption} secondary={Moment(message.time).format('lll')} />
         </Grid>
       </Grid>
     </ListItem>
   );
 }
+
+Message.propTypes = {
+  userId: PropTypes.number.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  message: PropTypes.object.isRequired,
+};
 
 export default Message;
