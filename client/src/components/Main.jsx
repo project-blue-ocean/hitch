@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Divider from '@mui/material/Divider';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import Typography from '@mui/material/Typography';
 
 function Main() {
   const [rides, setRides] = useState([]);
@@ -29,8 +36,16 @@ function Main() {
     }
   };
 
+  const styles = {
+    width: '350px',
+    minWidth: '350px',
+    fontsize: '18px',
+    margin: 'auto',
+    paddingTop: '300px',
+  };
+
   return (
-    <div>
+    <div className="search-page" style={styles}>
       {showRides ? (
         <div>
           <button
@@ -47,16 +62,44 @@ function Main() {
           </button>
 
           {rides.map((ride) => (
-            <div key={ride.date + ride.driverId}>
-              {ride.origin}
-              {' '}
-              to:
-              {' '}
-              {ride.destination}
-              {' '}
-              $
-              {ride.price}
-            </div>
+            <List
+              sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+              key={ride.date + ride.driverId}
+            >
+              <ListItem alignItems="flex-start">
+                <ListItemText
+                  primary={
+                    (
+                      <Typography
+                        sx={{ display: 'inline' }}
+                        component="span"
+                        variant="body2"
+                        color="text.primary"
+                      >
+                        {ride.origin}
+                        to:
+                        {ride.destination}
+                      </Typography>
+                    )
+                  }
+                  secondary={
+                    (
+                      <Typography
+                        sx={{ display: 'inline' }}
+                        component="span"
+                        variant="body2"
+                        color="text.primary"
+                      >
+                        {' '}
+                        $
+                        {ride.price}
+                      </Typography>
+                    )
+                  }
+                />
+              </ListItem>
+              <Divider variant="inset" component="li" />
+            </List>
           ))}
         </div>
       ) : (
