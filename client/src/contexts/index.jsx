@@ -1,5 +1,5 @@
 import React, {
-  useContext, useState, useEffect, useMemo,
+  useState, useEffect, useMemo,
 } from 'react';
 
 import {
@@ -8,8 +8,9 @@ import {
   signOut,
   sendPasswordResetEmail,
   onAuthStateChanged,
-  updatePassword as UP,
-  updateEmail as UE,
+  updatePassword as updatepassword,
+  updateEmail as updateemail,
+  updateProfile as updateprofile,
 } from 'firebase/auth';
 import { auth, db } from '../firebase';
 
@@ -36,11 +37,15 @@ export function AuthProvider({ children }) {
   }
 
   function updateEmail(newEmail) {
-    return UE(currentUser, newEmail);
+    return updateemail(currentUser, newEmail);
   }
 
   function updatePassword(newPassword) {
-    return UP(currentUser, newPassword);
+    return updatepassword(currentUser, newPassword);
+  }
+  // {displayName: 'displayName', photoURL: 'urlHere'}
+  function updateProfile(updatesObj) {
+    return updateprofile(currentUser, updatesObj);
   }
 
   useEffect(() => {
@@ -60,6 +65,7 @@ export function AuthProvider({ children }) {
     resetPassword,
     updateEmail,
     updatePassword,
+    updateProfile,
   }), []);
 
   return (
