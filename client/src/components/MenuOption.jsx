@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import CssBaseline from '@mui/material/CssBaseline';
+import { AuthContext } from '../contexts/index.jsx';
 
 function MenuOption() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -35,6 +36,8 @@ function MenuOption() {
   const handleLogout = () => {
     setAnchorEl(null);
     navigate('/login');
+    const { logout } = useContext(AuthContext);
+    logout();
   };
   return (
     <nav>
