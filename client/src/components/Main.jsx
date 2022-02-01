@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
@@ -45,15 +44,15 @@ function Main() {
     const data = await getRides(searchTerm.source);
     setRides(data);
     if (data.length > 0) setShowRides(true);
-    console.log(data);
   };
 
   const getUserProfile = (id) => {
+    //
     getProfile('wTNTNk9WndF91iuHDyym')
       .then((userProfile) => {
         setProfile(userProfile.data());
       })
-      .catch((err) => console.log('err', err));
+      .catch((err) => err);
   };
 
   const displayModal = (id) => {

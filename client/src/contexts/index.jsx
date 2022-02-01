@@ -83,8 +83,6 @@ export function AuthProvider({ children }) {
   }
 
   async function getRides(params) {
-    // const rideRef = doc(db, 'rides', params);
-    // return getDoc(rideRef);
     const rides = [];
     const q = query(ridesCollectionReference, where('start', '==', params));
     const querySnapshot = await getDocs(q);
@@ -92,13 +90,6 @@ export function AuthProvider({ children }) {
       rides.push(ride.data());
     });
     return rides;
-    // return getDocs(q);
-
-    // const querySnapshot = await getDocs(q);
-    // querySnapshot.forEach((doc) => {
-    //   // doc.data() is never undefined for query doc snapshots
-    //   console.log(doc.id, " => ", doc.data());
-    // });
   }
 
   function addReview(body) {
