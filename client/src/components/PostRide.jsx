@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Button,
@@ -14,10 +14,12 @@ import {
   DatePicker,
 } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import { AuthContext } from '../contexts/index.jsx';
 
 function PostRide({ userId }) {
   const [date, setDate] = useState(new Date());
   const navigate = useNavigate();
+  const { addRide } = useContext(AuthContext);
   const handleFormOnSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -30,7 +32,11 @@ function PostRide({ userId }) {
       year: date.getFullYear(),
       price: data.get('price'),
     };
-    navigate('/');
+    addRide(formToSend)
+      .then((ride) => {
+        navigate('/');
+      })
+      .catch((err) => err);
   };
   return (
     <Container component="main" maxWidth="xs">
