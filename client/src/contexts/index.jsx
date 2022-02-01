@@ -8,6 +8,7 @@ import {
   getDocs,
   updateDoc,
   doc,
+  onSnapshot,
 } from '@firebase/firestore';
 import {
   createUserWithEmailAndPassword,
@@ -60,6 +61,11 @@ export function AuthProvider({ children }) {
     return updateprofile(currentUser, updatesObj);
   }
 
+  function getProfile(params) {
+    const profRef = doc(db, 'profile', params);
+    return getDoc(profRef);
+  }
+
   function updateUser(body) {
     const userDoc = doc(db, 'users', body.id);
     return updateDoc(userDoc, body);
@@ -89,6 +95,9 @@ export function AuthProvider({ children }) {
   function addMessage(body) {
     addDoc(messagesCollectionReference, body);
   }
+  // function getMessages(params) {
+  //   return getDocs(messagesCollectionReference, params);
+  // }
 
   function getMessages(params) {
     return getDocs(messagesCollectionReference, params);
@@ -125,6 +134,7 @@ export function AuthProvider({ children }) {
     addMessage,
     getMessages,
     getContacts,
+    getProfile,
   }), []);
 
   return (
