@@ -24,8 +24,8 @@ function PostRide({ userId }) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const formToSend = {
-      email: data.get('start'),
-      password: data.get('destination'),
+      start: data.get('start'),
+      destination: data.get('destination'),
       date: data.get('date'),
       brand: data.get('brand'),
       model: data.get('model'),

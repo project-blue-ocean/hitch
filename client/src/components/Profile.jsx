@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -17,8 +17,8 @@ import { reviews } from './profileDummy.js';
 
 function Profile() {
   const navigate = useNavigate();
-  const [open, setOpen] = React.useState(false);
-  const [profile, setProfile] = React.useState({});
+  const [open, setOpen] = useState(false);
+  const [profile, setProfile] = useState({});
   const { getProfile } = useContext(AuthContext);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -8,6 +8,8 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Modal from '@mui/material/Modal';
+
+import { AuthContext } from '../contexts/index.jsx';
 
 const style = {
   position: 'absolute',
@@ -22,16 +24,34 @@ const style = {
 };
 
 export default function ReviewModal({ handleClose, open, profile }) {
-  const [value, setValue] = React.useState(0);
+  const { addReview, getReviews } = useContext(AuthContext);
+
+  const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    getReviews('wTNTNk9WndF91iuHDyym')
+      .then((userReviews) => {
+        //userReviews = array of review objects
+      })
+      .catch((err) => err);
+  }, []);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const feedback = data.get('feedback');
     const rating = data.get('half-rating');
     const rider = data.get('wasRider');
-    const driver = data.get('wasDriver');
-    const date = new Date();
-    console.log(feedback, rating, rider, driver, date);
+    const driverStatus = data.get('wasDriver');
+    const rideDate = new Date();
+    const review = {
+      reviewerId: '33',
+      starRating: rating,
+      driver: driverStatus,
+      date: rideDate,
+      message: feedback,
+    };
+    addReview(review);
     handleClose();
   };
   return (

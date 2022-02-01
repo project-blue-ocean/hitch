@@ -96,8 +96,13 @@ export function AuthProvider({ children }) {
     return addDoc(reviewsCollectionReference, body);
   }
 
-  function getReviews(params) {
-    return getDocs(reviewsCollectionReference, params);
+  async function getReviews(params) {
+    const reviews = [];
+    const reviewsSnapshot = await getDocs(reviewsCollectionReference, params);
+    reviewsSnapshot.forEach((review) => {
+      reviews.push(review.data());
+    });
+    return reviews;
   }
 
   function addMessage(body) {
