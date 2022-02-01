@@ -203,7 +203,7 @@ function Main() {
               <TextField
                 sx={{ background: 'white', opacity: '.9', borderRadius: '6px' }}
                 id="filled-basic"
-                label="Ride From"
+                label="Location"
                 varient="filled"
                 type="text"
                 name="From"
