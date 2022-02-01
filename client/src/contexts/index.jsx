@@ -72,7 +72,7 @@ export function AuthProvider({ children }) {
   }
 
   function addMessage(body) {
-    addDoc(messagesCollectionReference, body);
+    return addDoc(messagesCollectionReference, body);
   }
 
   function getMessages(params) {
