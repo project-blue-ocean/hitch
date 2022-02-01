@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import {
   Grid,
@@ -10,12 +10,14 @@ import {
 } from '@material-ui/core';
 import Message from './Message.jsx';
 import UserContacted from './UserContacted.jsx';
+import { AuthContext } from '../contexts/index.jsx';
 import dummyData from '../../../messagesDummyData';
 
 function Messages({ userId }) {
   const [usersContacted, setUsersContacted] = useState(dummyData.usersContacted);
   const [messages, setMessages] = useState(dummyData.messages);
   const [userContactedId, setUserContactedId] = useState(null);
+  const { currentUser, addMessage } = useContext(AuthContext);
 
   // const getUsersContacted = () => {
   //   return false;
@@ -24,6 +26,19 @@ function Messages({ userId }) {
   // const getMessages = (userContactedId) => {
   //   return false;
   // };
+
+  const sendMessage = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const messageToSend = {
+      message: data.get('message'),
+    };
+    addMessage(messageToSend)
+      .then((message) => {
+        console.log(message);
+      })
+      .catch((err) => console.log(err));
+  };
 
   const messagesEndRef = React.useRef();
 
@@ -61,12 +76,12 @@ function Messages({ userId }) {
             <div ref={messagesEndRef} />
           </List>
           <Divider />
-          <Grid container style={{ padding: '20px' }}>
+          <Grid container component="form" onSubmit={sendMessage} style={{ padding: '20px' }}>
             <Grid item xs={11}>
-              <TextField id="outlined-basic-email" fullWidth />
+              <TextField id="message" name="message" autoComplete="off" required fullWidth />
             </Grid>
             <Grid xs={1} align="right">
-              <Fab color="primary" aria-label="add">Send</Fab>
+              <Fab type="submit" color="primary" aria-label="add">Send</Fab>
             </Grid>
           </Grid>
         </Grid>
