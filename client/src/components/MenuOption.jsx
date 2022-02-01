@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import CssBaseline from '@mui/material/CssBaseline';
 import { AuthContext } from '../contexts/index.jsx';
+import logo from '../assets/logo.png';
 
 function MenuOption() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -39,11 +40,17 @@ function MenuOption() {
     navigate('/login');
     logout();
   };
+
+  const location = useLocation();
+  if (location.pathname === '/login' || location.pathname === '/signup') {
+    return <div />;
+  }
+
   return (
     <nav>
       <CssBaseline />
       <Typography component="h1" variant="h3">
-        Logo
+        <img alt="logo" src={logo} width="90vw" />
       </Typography>
       <Button
         id="basic-button"
@@ -63,7 +70,7 @@ function MenuOption() {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={handleHome} sx={{ mb: 0.5}}>Home</MenuItem>
+        <MenuItem onClick={handleHome} sx={{ mb: 0.5 }}>Home</MenuItem>
         <MenuItem onClick={handleProfile} sx={{ mb: 0.5 }}>Profile</MenuItem>
         <MenuItem onClick={handleMessages} sx={{ mb: 0.5 }}>Messages</MenuItem>
         <MenuItem onClick={handleRide} sx={{ mb: 3 }}>Post a Ride</MenuItem>

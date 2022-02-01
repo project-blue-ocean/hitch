@@ -5,7 +5,6 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
-// import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import DetailsIcon from '@mui/icons-material/Sms';
@@ -16,7 +15,7 @@ import TextField from '@mui/material/TextField';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Modal from '@mui/material/Modal';
 import Rating from '@mui/material/Rating';
-import van from '../assets/van1.png';
+import van from '../assets/road1.jpeg';
 
 function Main() {
   const [profile, setProfile] = useState({});
@@ -100,7 +99,6 @@ function Main() {
           margin: 'auto',
           width: '50%',
           textAlign: 'center',
-
         }}
       >
         <h1> Hitch(not a dating app)</h1>
