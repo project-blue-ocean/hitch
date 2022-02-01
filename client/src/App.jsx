@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDom from 'react-dom';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PrivateRoute from './firebase/PrivateRoute.jsx';
@@ -21,9 +21,9 @@ function App() {
         <MenuOption />
         <Routes>
           {/* TODO: Wrap private pages in <PrivateRoute></PrivateRoute> */}
-          <Route path="/" exact element={<Main />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/" exact element={<Main />} />
           <Route path="/my-profile" element={<Profile />} />
           <Route path="/messages" element={<Messages userId={84} />} />
           <Route path="/post-ride" element={<PostRide />} />
