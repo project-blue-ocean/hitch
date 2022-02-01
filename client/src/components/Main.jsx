@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import List from '@mui/material/List';
@@ -16,8 +16,11 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Modal from '@mui/material/Modal';
 import Rating from '@mui/material/Rating';
 import van from '../assets/road1.jpeg';
+import { AuthContext } from '../contexts/index.jsx';
 
 function Main() {
+  const { getRides, getProfile } = useContext(AuthContext);
+
   const [profile, setProfile] = useState({});
   const [showDetails, setShowDetails] = useState(false);
   const [rides, setRides] = useState([]);
@@ -31,30 +34,30 @@ function Main() {
     const { value } = e.target;
     const name = e.target.getAttribute('name');
     if (name === 'From') {
-      setSearchTerm({ ...searchTerm, source: value.toLowerCase() });
+      setSearchTerm({ ...searchTerm, source: value });
     } else if (name === 'Destination') {
-      setSearchTerm({ ...searchTerm, destination: value.toLowerCase() });
+      setSearchTerm({ ...searchTerm, destination: value });
     }
   };
 
   const searchRides = async (e) => {
     e.preventDefault();
-    const response = await axios.get('/rides', { params: { search: searchTerm } });
-    const { data } = await response;
+    const data = await getRides(searchTerm.source);
     setRides(data);
-    if (data.length > 0) {
-      setShowRides(true);
-    }
+    if (data.length > 0) setShowRides(true);
+    console.log(data);
   };
 
-  const getProfile = async (id) => {
-    const response = await axios.get('/profile', { params: { search: id } });
-    const { data } = await response;
-    setProfile(data);
+  const getUserProfile = (id) => {
+    getProfile('wTNTNk9WndF91iuHDyym')
+      .then((userProfile) => {
+        setProfile(userProfile.data());
+      })
+      .catch((err) => console.log('err', err));
   };
 
   const displayModal = (id) => {
-    getProfile(id);
+    getUserProfile(id);
     setShowDetails(true);
   };
 
@@ -155,7 +158,7 @@ function Main() {
                               variant="body2"
                               color="text.primary"
                             >
-                              {ride.origin}
+                              {ride.start}
                               {' '}
                               <ArrowForwardIcon />
                               {ride.destination}

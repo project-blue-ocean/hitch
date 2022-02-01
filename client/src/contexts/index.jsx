@@ -9,6 +9,8 @@ import {
   updateDoc,
   doc,
   onSnapshot,
+  query,
+  where,
 } from '@firebase/firestore';
 import {
   createUserWithEmailAndPassword,
@@ -80,8 +82,23 @@ export function AuthProvider({ children }) {
     return addDoc(ridesCollectionReference, body);
   }
 
-  function getRides(params) {
-    return getDoc(ridesCollectionReference, params);
+  async function getRides(params) {
+    // const rideRef = doc(db, 'rides', params);
+    // return getDoc(rideRef);
+    const rides = [];
+    const q = query(ridesCollectionReference, where('start', '==', params));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((ride) => {
+      rides.push(ride.data());
+    });
+    return rides;
+    // return getDocs(q);
+
+    // const querySnapshot = await getDocs(q);
+    // querySnapshot.forEach((doc) => {
+    //   // doc.data() is never undefined for query doc snapshots
+    //   console.log(doc.id, " => ", doc.data());
+    // });
   }
 
   function addReview(body) {
