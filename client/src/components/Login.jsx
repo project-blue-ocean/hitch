@@ -32,11 +32,9 @@ function Login() {
     e.preventDefault();
     try {
       setLoading(true);
-      await login(email, password)
-        .then((userCredential) => {
-          const { user } = userCredential;
-          console.log('user cred', userCredential);
-          // TODO: add userId to context
+      login(email, password)
+        .then(() => {
+          navigate('/');
         })
         .catch((err) => {
           switch (err.code) {
@@ -57,12 +55,13 @@ function Login() {
               setError(err.message);
               break;
           }
+        })
+        .then(() => {
+          setLoading(false);
         });
     } catch {
       return setError('Failed to login');
     }
-    setLoading(false);
-    navigate('/'); // redirect where you would like
   };
   return (
     <div>
