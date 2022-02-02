@@ -16,10 +16,10 @@ import {
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { AuthContext } from '../contexts/index.jsx';
 
-function PostRide({ userId }) {
+function PostRide() {
   const [date, setDate] = useState(new Date());
   const navigate = useNavigate();
-  const { addRide } = useContext(AuthContext);
+  const { currentUser, addRide } = useContext(AuthContext);
   const handleFormOnSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -31,12 +31,13 @@ function PostRide({ userId }) {
       model: data.get('model'),
       year: date.getFullYear(),
       price: data.get('price'),
+      user: currentUser.user.uid,
     };
     addRide(formToSend)
       .then((ride) => {
         navigate('/');
       })
-      .catch((err) => err);
+      .catch((err) => console.log(err));
   };
   return (
     <Container component="main" maxWidth="xs">
