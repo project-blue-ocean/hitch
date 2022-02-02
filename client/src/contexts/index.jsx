@@ -11,6 +11,7 @@ import {
   onSnapshot,
   query,
   where,
+  orderBy,
 } from '@firebase/firestore';
 import {
   createUserWithEmailAndPassword,
@@ -80,7 +81,7 @@ export function AuthProvider({ children }) {
 
   function getMessages(params, callback) {
     console.log(params);
-    const q = query(collection(db, 'messages'), where('chatid', 'array-contains', params));
+    const q = query(collection(db, 'messages'), orderBy('time'), where('chatd', 'array-contains', params));
     onSnapshot(q, (querySnapshot) => {
       const messages = [];
       querySnapshot.forEach((docs) => {

@@ -37,7 +37,7 @@ function Messages({ userId }) {
     const messageToSend = {
       message: data.get('message'),
       senderId: currentUser.uid,
-      chatid: [userContactedId + currentUser.uid, currentUser.uid + userContactedId],
+      chatd: [userContactedId + currentUser.uid, currentUser.uid + userContactedId],
       time: new Date(),
     };
     addMessage(messageToSend)
