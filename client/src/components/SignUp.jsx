@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Alert from '@material-ui/core/Alert';
+
 // Authentication context
 import { AuthContext } from '../contexts/index.jsx';
 
@@ -15,18 +16,22 @@ function SignUp() {
   const navigate = useNavigate();
 
   // State
-  const [fname, setFname] = useState();
-  const [lname, setLname] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [passwordConfirmation, setPasswordConfirmation] = useState();
-  const [dob, setDOB] = useState();
+  const [firstName, setFname] = useState('');
+  const [lastName, setLname] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const [dob, setDOB] = useState('');
+  const [avatar, setAvatar] = useState('');
+  const [bio, setBio] = useState('');
 
   const [error, setError] = useState('');
   const [isLoading, setLoading] = useState(false);
 
   // Context
-  const { signup } = useContext(AuthContext);
+  const {
+    signup, addProfile, updateProfile, uploadAvatar,
+  } = useContext(AuthContext);
 
   // Methods
   const onChange = (e) => {
@@ -37,48 +42,56 @@ function SignUp() {
     if (id === 'password') setPassword(value);
     if (id === 'passwordConfirmation') setPasswordConfirmation(value);
     if (id === 'dob') setDOB(value);
+    if (id === 'bio') setBio(value);
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const onImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const img = e.target.files[0];
+      setAvatar(img);
+    }
+  };
 
-    if (password !== passwordConfirmation) {
-      return setError('Passwords do not match');
-    }
+  const handleSubmit = async (e) => {
     try {
+      e.preventDefault();
+      if (password !== passwordConfirmation) {
+        return setError('Passwords do not match');
+      }
       setLoading(true);
-      await signup(email, password)
-        .then((userCredential) => {
-          console.log('user cred', userCredential);
-          const { user } = userCredential;
-          // TODO: add firstName, lastName, dob, and profilePicture to database
-          // add userId to context
-        })
-        .catch((err) => {
-          switch (err.code) {
-            case 'auth/email-already-in-use':
-              setError(`Email address ${email} already in use.`);
-              break;
-            case 'auth/invalid-email':
-              setError(`Email address ${email} is invalid.`);
-              break;
-            case 'auth/operation-not-allowed':
-              setError('Error during sign up.');
-              break;
-            case 'auth/weak-password':
-              setError('Password is not strong enough. Add additional characters including special characters and numbers.');
-              break;
-            default:
-              console.error(err.message);
-              setError(err.message);
-              break;
-          }
-        });
-    } catch {
-      return setError('Failed to create an account');
+      const userCredential = await signup(email, password);
+      const { user } = userCredential;
+      const photoURL = await uploadAvatar(user.uid, avatar);
+      const name = [firstName, lastName].join(' ');
+      // FIX: age may be off by 1
+      const age = (new Date().getFullYear()) - (new Date(dob).getFullYear());
+      await addProfile({
+        userId: user.uid, name, image: { url: photoURL }, age, bio, riderRating: 0, driverRating: 0,
+      });
+      await updateProfile({ displayName: name, photoURL });
+      await navigate('/login');
+    } catch (err) {
+      switch (err.code) {
+        case 'auth/email-already-in-use':
+          setError(`Email address ${email} already in use.`);
+          break;
+        case 'auth/invalid-email':
+          setError(`Email address ${email} is invalid.`);
+          break;
+        case 'auth/operation-not-allowed':
+          setError('Error during sign up.');
+          break;
+        case 'auth/weak-password':
+          setError('Password is not strong enough. Add additional characters including special characters and numbers.');
+          break;
+        default:
+          console.error(err.code, err.message);
+          setError(err.message);
+          break;
+      }
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-    navigate('/login'); // redirect where you would like
   };
 
   // Render
@@ -160,6 +173,34 @@ function SignUp() {
             <Grid item xs={12}>
               <TextField
                 required
+                name="bio"
+                id="bio"
+                fullWidth
+                label="Bio"
+                placeholder="Tell us about yourself!"
+                multiline
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <>
+                <input
+                  accept="image/*"
+                  type="file"
+                  id="select-image"
+                  style={{ display: 'none' }}
+                  onChange={onImageChange}
+                />
+                <label htmlFor="select-image">
+                  <Button variant="contained" color="primary" component="span">
+                    Upload Avatar
+                  </Button>
+                </label>
+              </>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
                 id="dob"
                 label="Birthday"
                 type="date"
@@ -171,7 +212,6 @@ function SignUp() {
               />
             </Grid>
           </Grid>
-
           <Button
             type="submit"
             disabled={isLoading}

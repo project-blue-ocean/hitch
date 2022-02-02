@@ -19,7 +19,9 @@ import {
   onAuthStateChanged,
   updateProfile as updateprofile,
 } from 'firebase/auth';
-import { auth, db } from '../firebase';
+
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { auth, db, storage } from '../firebase';
 
 const ridesCollectionReference = collection(db, 'rides');
 const reviewsCollectionReference = collection(db, 'reviews');
@@ -32,6 +34,7 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
 
+  // Authorization
   function signup(email, password) {
     return createUserWithEmailAndPassword(auth, email, password);
   }
@@ -45,7 +48,18 @@ export function AuthProvider({ children }) {
   }
 
   function updateProfile(updatesObj) {
-    return updateprofile(currentUser, updatesObj);
+    const user = auth.currentUser;
+    return updateprofile(user, updatesObj);
+  }
+
+  function uploadAvatar(uid, file) {
+    const storageRef = ref(storage, `users/${uid}/${file.name}`);
+    return uploadBytes(storageRef, file).then(() => getDownloadURL(ref(storage, `users/${uid}/${file.name}`)));
+  }
+
+  // User
+  function addProfile(body) {
+    return addDoc(collection(db, 'profile'), body);
   }
 
   function getProfile(params) {
@@ -63,6 +77,7 @@ export function AuthProvider({ children }) {
     return getDoc(docRef);
   }
 
+  // Rides
   function addRide(body) {
     return addDoc(ridesCollectionReference, body);
   }
@@ -77,6 +92,7 @@ export function AuthProvider({ children }) {
     return rides;
   }
 
+  // Reviews
   function addReview(body) {
     return addDoc(reviewsCollectionReference, body);
   }
@@ -90,6 +106,7 @@ export function AuthProvider({ children }) {
     return reviews;
   }
 
+  // Messages
   function addMessage(body) {
     return addDoc(messagesCollectionReference, body);
   }
@@ -120,6 +137,8 @@ export function AuthProvider({ children }) {
     signup,
     logout,
     updateProfile,
+    uploadAvatar,
+    addProfile,
     getUser,
     updateUser,
     addRide,
