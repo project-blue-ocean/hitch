@@ -14,7 +14,7 @@ import TextField from '@mui/material/TextField';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Modal from '@mui/material/Modal';
 import Rating from '@mui/material/Rating';
-import van from '../assets/road1.jpeg';
+import van from '../assets/van1.png';
 import { AuthContext } from '../contexts/index.jsx';
 
 function Main() {
@@ -47,8 +47,7 @@ function Main() {
   };
 
   const getUserProfile = (id) => {
-    //
-    getProfile('wTNTNk9WndF91iuHDyym')
+    getProfile(id)
       .then((userProfile) => {
         setProfile(userProfile.data());
       })
@@ -242,7 +241,7 @@ function Main() {
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
               <div>
                 <Avatar alt={profile.name} src={profile.image} />
-                <Link to={`/my-profile/${profile.userId}`} state={{ id: profile.userId }}>
+                <Link to="/my-profile" state={{ id: profile.userId }}>
                   {profile.name}
                 </Link>
               </div>

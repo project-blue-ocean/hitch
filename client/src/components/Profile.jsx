@@ -26,7 +26,7 @@ function Profile() {
   const { id } = location.state;
 
   useEffect(() => {
-    if (id !== null) {
+    if (id) {
       getProfile(id)
         .then((userProfile) => {
           setProfile(userProfile.data());
