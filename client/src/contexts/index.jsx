@@ -12,6 +12,7 @@ import {
   onSnapshot,
   query,
   where,
+  orderBy,
 } from '@firebase/firestore';
 import {
   createUserWithEmailAndPassword,
@@ -115,8 +116,16 @@ export function AuthProvider({ children }) {
   //   return getDocs(messagesCollectionReference, params);
   // }
 
-  function getMessages(params) {
-    return getDocs(messagesCollectionReference, params);
+  function getMessages(params, callback) {
+    console.log(params);
+    const q = query(collection(db, 'messages'), orderBy('time'), where('chatd', 'array-contains', params));
+    onSnapshot(q, (querySnapshot) => {
+      const messages = [];
+      querySnapshot.forEach((docs) => {
+        messages.push(docs.data());
+      });
+      callback(messages);
+    });
   }
 
   function getContacts(params) {
