@@ -87,10 +87,9 @@ export default function Map({ location, startCoords, endCoords }) {
       <div
         ref={mapContainer}
         style={{
-          width: '70vw',
-          height: '50vw',
-          maxWidth: '400px',
-          maxHeight: '300px',
+          width: '100vw',
+          height: '70vw',
+          maxHeight: '400px',
         }}
         className="map-container"
       />
