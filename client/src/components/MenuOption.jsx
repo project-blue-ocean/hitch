@@ -12,7 +12,7 @@ function MenuOption() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
-  const { logout } = useContext(AuthContext);
+  const { logout, currentUser } = useContext(AuthContext);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
