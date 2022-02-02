@@ -42,7 +42,6 @@ export default function Map({ location, startCoords, endCoords }) {
         [endCoords.longitude, endCoords.latitude],
         [startCoords.longitude, startCoords.latitude],
       ];
-      console.log(bounds)
       map.current.fitBounds(bounds, {padding: 50});
       const response = await axios.get('/directions', {
         params: {

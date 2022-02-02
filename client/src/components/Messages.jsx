@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import {
   Grid,
@@ -12,10 +12,22 @@ import Message from './Message.jsx';
 import UserContacted from './UserContacted.jsx';
 import dummyData from '../../../messagesDummyData';
 
+import { AuthContext } from '../contexts/index.jsx';
+
+
 function Messages({ userId }) {
   const [usersContacted, setUsersContacted] = useState(dummyData.usersContacted);
   const [messages, setMessages] = useState(dummyData.messages);
   const [userContactedId, setUserContactedId] = useState(null);
+  //  alex test
+  // Context
+  const { getUser } = useContext(AuthContext);
+
+  // getUser('1NsyaeVqmEIcvrcdH9AQ')
+  //   .then((user) => console.log(user.data()))
+  //   .catch((err) => console.log(err))
+
+  // alex test
 
   // const getUsersContacted = () => {
   //   return false;

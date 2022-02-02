@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
@@ -15,10 +14,13 @@ import TextField from '@mui/material/TextField';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Modal from '@mui/material/Modal';
 import Rating from '@mui/material/Rating';
+import axios from 'axios';
 import van from '../assets/road1.jpeg';
 import Map from './Map.jsx';
+import { AuthContext } from '../contexts/index.jsx';
 
 function Main() {
+  const { getRides, getProfile } = useContext(AuthContext);
   const [profile, setProfile] = useState({});
   const [showDetails, setShowDetails] = useState(false);
   const [rides, setRides] = useState([]);
@@ -41,17 +43,7 @@ function Main() {
     latitude: 0,
   });
 
-  const searchRides = async (from, destination) => {
-    const response = await axios.get('/rides', {
-      params: {
-        search: {
-          source: from,
-          destination,
-        },
-      },
-    });
-    const { data } = response;
-    setRides(data);
+  const getCoordinates = async(from, destination) => {
     if (from !== '' && destination === '') {
       const sourceResponse = await axios.get('/coords', { params: { location: from } });
       await setStart({
@@ -80,6 +72,19 @@ function Main() {
         latitude: endResponse.data.features[0].bbox[1],
       });
     }
+  }
+
+  const searchRides = async (from, destination) => {
+    const response = await axios.get('/rides', {
+      params: {
+        search: {
+          source: from,
+          destination,
+        },
+      },
+    });
+    const { data } = response;
+    setRides(data);
     if (data.length > 0) {
       setShowRides(true);
     }
@@ -92,16 +97,19 @@ function Main() {
     const destination = formData.get('Destination').toLowerCase();
     setSearchTerm({ source: from, destination });
     searchRides(from, destination);
+    getCoordinates(from, destination);
   };
 
-  const getProfile = async (id) => {
-    const response = await axios.get('/profile', { params: { search: id } });
-    const { data } = await response;
-    setProfile(data);
+  const getUserProfile = (id) => {
+    getProfile('wTNTNk9WndF91iuHDyym')
+      .then((userProfile) => {
+        setProfile(userProfile.data());
+      })
+      .catch((err) => err);
   };
 
   const displayModal = (id) => {
-    getProfile(id);
+    getUserProfile(id);
     setShowDetails(true);
   };
 
@@ -222,7 +230,7 @@ function Main() {
                               variant="body2"
                               color="text.primary"
                             >
-                              {ride.origin}
+                              {ride.start}
                               {' '}
                               <ArrowForwardIcon />
                               {ride.destination}
