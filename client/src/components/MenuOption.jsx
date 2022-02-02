@@ -25,7 +25,7 @@ function MenuOption() {
   };
   const handleProfile = () => {
     setAnchorEl(null);
-    navigate('/my-profile');
+    navigate('/my-profile', { state: { id: currentUser.uid } });
   };
   const handleMessages = () => {
     setAnchorEl(null);
