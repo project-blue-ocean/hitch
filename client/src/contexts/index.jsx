@@ -19,7 +19,9 @@ import {
   updateEmail as updateemail,
   updateProfile as updateprofile,
 } from 'firebase/auth';
-import { auth, db } from '../firebase';
+
+import { ref, uploadBytes } from 'firebase/storage';
+import { auth, db, storage } from '../firebase';
 
 const ridesCollectionReference = collection(db, 'rides');
 const reviewsCollectionReference = collection(db, 'reviews');
@@ -32,6 +34,7 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
 
+  // Authorization
   function signup(email, password) {
     return createUserWithEmailAndPassword(auth, email, password);
   }
@@ -55,9 +58,26 @@ export function AuthProvider({ children }) {
   function updatePassword(newPassword) {
     return updatepassword(currentUser, newPassword);
   }
-  // {displayName: 'displayName', photoURL: 'urlHere'}
+
   function updateProfile(updatesObj) {
     return updateprofile(currentUser, updatesObj);
+  }
+
+  /**
+   * uploads and image to the /images directory
+   * @param file - Blob | Uint8Array | ArrayBuffer
+  */
+  function uploadAvatar(uid, file) {
+    const storageRef = ref(storage, `users/${uid}/${file.name}`);
+    return uploadBytes(storageRef, file).then((snapshot) => {
+      console.log('Uploaded a blob or file!');
+      console.log(snapshot);
+    });
+  }
+
+  // User
+  function createUser(body) {
+    return addDoc(collection(db, 'users'), body);
   }
 
   function updateUser(body) {
@@ -70,6 +90,7 @@ export function AuthProvider({ children }) {
     return getDoc(docRef);
   }
 
+  // Rides
   function addRide(body) {
     return addDoc(ridesCollectionReference, body);
   }
@@ -78,6 +99,7 @@ export function AuthProvider({ children }) {
     return getDoc(ridesCollectionReference, params);
   }
 
+  // Reviews
   function addReview(body) {
     return addDoc(reviewsCollectionReference, body);
   }
@@ -86,6 +108,7 @@ export function AuthProvider({ children }) {
     return getDocs(reviewsCollectionReference, params);
   }
 
+  // Messages
   function addMessage(body) {
     addDoc(messagesCollectionReference, body);
   }
@@ -116,6 +139,8 @@ export function AuthProvider({ children }) {
     updateEmail,
     updatePassword,
     updateProfile,
+    uploadAvatar,
+    createUser,
     getUser,
     updateUser,
     addRide,

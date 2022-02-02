@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Alert from '@material-ui/core/Alert';
+
 // Authentication context
 import { AuthContext } from '../contexts/index.jsx';
 
@@ -15,18 +16,21 @@ function SignUp() {
   const navigate = useNavigate();
 
   // State
-  const [fname, setFname] = useState();
-  const [lname, setLname] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [passwordConfirmation, setPasswordConfirmation] = useState();
-  const [dob, setDOB] = useState();
+  const [firstName, setFname] = useState('');
+  const [lastName, setLname] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const [dob, setDOB] = useState('');
+  const [avatar, setAvatar] = useState('');
 
   const [error, setError] = useState('');
   const [isLoading, setLoading] = useState(false);
 
   // Context
-  const { signup } = useContext(AuthContext);
+  const {
+    signup, createUser, updateProfile, uploadAvatar,
+  } = useContext(AuthContext);
 
   // Methods
   const onChange = (e) => {
@@ -39,9 +43,15 @@ function SignUp() {
     if (id === 'dob') setDOB(value);
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const onImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const img = e.target.files[0];
+      setAvatar(img);
+    }
+  };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     if (password !== passwordConfirmation) {
       return setError('Passwords do not match');
     }
@@ -49,10 +59,21 @@ function SignUp() {
       setLoading(true);
       await signup(email, password)
         .then((userCredential) => {
-          console.log('user cred', userCredential);
           const { user } = userCredential;
-          // TODO: add firstName, lastName, dob, and profilePicture to database
-          // add userId to context
+          return createUser({
+            firstName, lastName, email, dob, id: user.uid,
+          })
+            .then(() => uploadAvatar(user.uid, avatar));
+        })
+        .then((uploadResult) => {
+          console.log('uploadResult', uploadResult);
+          const displayName = [firstName, lastName].join(' ');
+          // TODO: add link to photoURL
+          const photoURL = 'TODO';
+          return updateProfile({ displayName });
+        })
+        .then(() => {
+          navigate('/login'); // redirect where you would like
         })
         .catch((err) => {
           switch (err.code) {
@@ -69,16 +90,17 @@ function SignUp() {
               setError('Password is not strong enough. Add additional characters including special characters and numbers.');
               break;
             default:
-              console.error(err.message);
+              console.error(err.code, err.message);
               setError(err.message);
               break;
           }
+        })
+        .then(() => {
+          setLoading(false);
         });
     } catch {
       return setError('Failed to create an account');
     }
-    setLoading(false);
-    navigate('/login'); // redirect where you would like
   };
 
   // Render
@@ -156,6 +178,22 @@ function SignUp() {
                 autoComplete="password-confirmation"
                 onChange={onChange}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <>
+                <input
+                  accept="image/*"
+                  type="file"
+                  id="select-image"
+                  style={{ display: 'none' }}
+                  onChange={onImageChange}
+                />
+                <label htmlFor="select-image">
+                  <Button variant="contained" color="primary" component="span">
+                    Upload Avatar
+                  </Button>
+                </label>
+              </>
             </Grid>
             <Grid item xs={12}>
               <TextField
