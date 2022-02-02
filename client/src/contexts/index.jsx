@@ -7,6 +7,7 @@ import {
   getDoc,
   getDocs,
   updateDoc,
+  setDoc,
   doc,
   onSnapshot,
   query,
@@ -60,7 +61,7 @@ export function AuthProvider({ children }) {
 
   // User
   function addProfile(body) {
-    return addDoc(collection(db, 'profile'), body);
+    return setDoc(doc(db, 'profile', body.userId), body);
   }
 
   function getProfile(params) {
