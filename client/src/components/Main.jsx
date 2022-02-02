@@ -188,6 +188,7 @@ function Main() {
                 sx={{ width: '50%' }}
                 variant="contained"
                 type="submit"
+                onClick={() => { setShowRides(false); }}
               >
                 Change Search
               </Button>
