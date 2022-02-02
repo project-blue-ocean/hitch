@@ -316,7 +316,7 @@ function Main() {
             <Typography>
               <Link to="/my-profile" state={{ id: profile.userId }} style={{ textDecoration: 'none' }}>
                 <Button
-                  sx={{ width: '50%' }}
+                  sx={{ width: '150px' }}
                   variant="contained"
                 >
                   Go to Profile
@@ -324,7 +324,7 @@ function Main() {
               </Link>
               <Link to="/messages" state={{ id: profile.userId }} style={{ textDecoration: 'none' }}>
                 <Button
-                  sx={{ width: '50%' }}
+                  sx={{ width: '150px' }}
                   variant="contained"
                 >
                   message
