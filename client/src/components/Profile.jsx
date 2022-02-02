@@ -19,32 +19,29 @@ function Profile() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [profile, setProfile] = useState({});
-  const { getProfile } = useContext(AuthContext);
+  const { getProfile, currentUser } = useContext(AuthContext);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const location = useLocation();
   const { id } = location.state;
 
   useEffect(() => {
-    if (id) {
-      getProfile(id)
-        .then((userProfile) => {
-          setProfile(userProfile.data());
-        })
-        .catch((err) => err);
-    } else {
-      getProfile('h5WyNDhKFC6mDuOH5UVu')
-        .then((userProfile) => {
-          setProfile(userProfile.data());
-        })
-        .catch((err) => err);
-    }
+    // console.log(currentUser.uid);
+    // ! currentUser.uid , id
+    const userId = id || currentUser.uid;
+
+    getProfile(userId)
+      .then((userProfile) => {
+        setProfile(userProfile.data());
+      })
+      .catch((err) => err);
   }, []);
 
   const handleMessage = () => {
     const { userId } = profile;
     navigate('/messages', { userId });
   };
+  const profileImage = profile && profile.image ? profile.image.url : null;
 
   return (
     <Container component="main" maxWidth="auto">
@@ -61,7 +58,7 @@ function Profile() {
           width: 250,
           height: 250,
           borderRadius: 1,
-          backgroundImage: `url(${profile.url})`,
+          backgroundImage: `url(${profileImage})`,
           backgroundRepeat: 'no-repeat',
           backgroundSize: 'cover',
           backgroundPosition: 'center',

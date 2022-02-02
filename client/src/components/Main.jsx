@@ -26,10 +26,7 @@ function Main() {
   const [rides, setRides] = useState([]);
   const [showRides, setShowRides] = useState(false);
   const [showMap, setMap] = useState(false);
-  const [searchTerm, setSearchTerm] = useState({
-    source: '',
-    destination: '',
-  });
+  const [profilepic, setprofilepic] = useState('');
   const [location, setLocation] = useState({
     longitude: 0,
     latitude: 0,
@@ -72,7 +69,7 @@ function Main() {
         latitude: endResponse.data.features[0].bbox[1],
       });
     }
-  }
+  };
 
   const searchRides = async (from) => {
     const data = await getRides(from);
@@ -85,21 +82,21 @@ function Main() {
     const formData = new FormData(e.currentTarget);
     const from = formData.get('From');
     const destination = formData.get('Destination');
-    setSearchTerm({ source: from, destination });
     searchRides(from, destination);
     getCoordinates(from, destination);
   };
 
-  const getUserProfile = (id) => {
+  const getUserProfile = async (id) => {
     getProfile(id)
       .then((userProfile) => {
         setProfile(userProfile.data());
+        setprofilepic(userProfile.data().image.url);
       })
       .catch((err) => err);
   };
 
-  const displayModal = (id) => {
-    getUserProfile(id);
+  const displayModal = async (id) => {
+    await getUserProfile(id);
     setShowDetails(true);
   };
 
@@ -191,13 +188,7 @@ function Main() {
                 sx={{ width: '50%' }}
                 variant="contained"
                 type="submit"
-                onClick={() => {
-                  setShowRides(false);
-                  setSearchTerm({
-                    source: '',
-                    destination: '',
-                  });
-                }}
+                onClick={() => { setShowRides(false); }}
               >
                 Change Search
               </Button>
@@ -317,15 +308,12 @@ function Main() {
             <Typography id="modal-modal-title" variant="h6" component="h2">
               Driver Details
             </Typography>
+            <Avatar alt="userpic" src={profilepic} />
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              <div>
-                <Avatar alt={profile.name} src={profile.image} />
-                {' '}
-                Driver:
-                {profile.name}
-                {' '}
-              </div>
-
+              {' '}
+              Driver:
+              {profile.name}
+              {' '}
               <Rating name="rating" value={Number(profile.driverRating)} readOnly precision={0.5} />
             </Typography>
             <Typography>
