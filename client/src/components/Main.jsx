@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import List from '@mui/material/List';
@@ -16,35 +16,82 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Modal from '@mui/material/Modal';
 import Rating from '@mui/material/Rating';
 import van from '../assets/road1.jpeg';
+import Map from './Map.jsx';
 
 function Main() {
   const [profile, setProfile] = useState({});
   const [showDetails, setShowDetails] = useState(false);
   const [rides, setRides] = useState([]);
   const [showRides, setShowRides] = useState(false);
+  const [showMap, setMap] = useState(false);
   const [searchTerm, setSearchTerm] = useState({
     source: '',
     destination: '',
   });
+  const [location, setLocation] = useState({
+    longitude: 0,
+    latitude: 0,
+  });
+  const [startCoords, setStart] = useState({
+    longitude: 0,
+    latitude: 0,
+  });
+  const [endCoords, setEnd] = useState({
+    longitude: 0,
+    latitude: 0,
+  });
 
-  const updateSearch = (e) => {
-    const { value } = e.target;
-    const name = e.target.getAttribute('name');
-    if (name === 'From') {
-      setSearchTerm({ ...searchTerm, source: value.toLowerCase() });
-    } else if (name === 'Destination') {
-      setSearchTerm({ ...searchTerm, destination: value.toLowerCase() });
-    }
-  };
-
-  const searchRides = async (e) => {
-    e.preventDefault();
-    const response = await axios.get('/rides', { params: { search: searchTerm } });
-    const { data } = await response;
+  const searchRides = async (from, destination) => {
+    const response = await axios.get('/rides', {
+      params: {
+        search: {
+          source: from,
+          destination,
+        },
+      },
+    });
+    const { data } = response;
     setRides(data);
+    if (from !== '' && destination === '') {
+      const sourceResponse = await axios.get('/coords', { params: { location: from } });
+      await setStart({
+        longitude: sourceResponse.data.features[0].bbox[0],
+        latitude: sourceResponse.data.features[0].bbox[1],
+      });
+      setEnd({ longitude: 0, latitude: 0 });
+    }
+    if (destination !== '' && from === '') {
+      const endResponse = await axios.get('/coords', { params: { location: destination } });
+      await setEnd({
+        longitude: endResponse.data.features[0].bbox[0],
+        latitude: endResponse.data.features[0].bbox[1],
+      });
+      setStart({ longitude: 0, latitude: 0 });
+    }
+    if (destination !== '' && from !== '') {
+      const sourceResponse = await axios.get('/coords', { params: { location: from } });
+      await setStart({
+        longitude: sourceResponse.data.features[0].bbox[0],
+        latitude: sourceResponse.data.features[0].bbox[1],
+      });
+      const endResponse = await axios.get('/coords', { params: { location: destination } });
+      await setEnd({
+        longitude: endResponse.data.features[0].bbox[0],
+        latitude: endResponse.data.features[0].bbox[1],
+      });
+    }
     if (data.length > 0) {
       setShowRides(true);
     }
+  };
+
+  const submitForm = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const from = formData.get('From').toLowerCase();
+    const destination = formData.get('Destination').toLowerCase();
+    setSearchTerm({ source: from, destination });
+    searchRides(from, destination);
   };
 
   const getProfile = async (id) => {
@@ -61,6 +108,23 @@ function Main() {
   const closeModal = () => {
     setShowDetails(false);
   };
+
+  async function showPosition(position) {
+    await setLocation({ longitude: position.coords.longitude, latitude: position.coords.latitude });
+    setMap(true);
+  }
+
+  async function getLocation() {
+    if (navigator.geolocation) {
+      await navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+      console.log('Geolocation is not supported by this browser.');
+    }
+  }
+
+  useEffect(() => {
+    getLocation();
+  }, []);
 
   const modalStyle = {
     position: 'absolute',
@@ -101,7 +165,10 @@ function Main() {
           textAlign: 'center',
         }}
       >
-        <h1> Hitch(not a dating app)</h1>
+        {/* <h1> Hitch(not a dating app)</h1> */}
+        {showMap
+          && <Map location={location} startCoords={startCoords} endCoords={endCoords} />}
+
         <div className="search-box" style={styles}>
           {showRides ? (
             <div className="search-container" style={{ width: '100%' }}>
@@ -143,7 +210,7 @@ function Main() {
                         >
                           <DetailsIcon />
                         </IconButton>
-                        )}
+                      )}
                     >
                       <ListItemText
                         primary={
@@ -198,7 +265,7 @@ function Main() {
               }}
               noValidate
               autoComplete="off"
-              onSubmit={searchRides}
+              onSubmit={submitForm}
             >
               <TextField
                 sx={{ background: 'white', opacity: '.9', borderRadius: '6px' }}
@@ -207,7 +274,6 @@ function Main() {
                 varient="filled"
                 type="text"
                 name="From"
-                onChange={updateSearch}
                 autoFocus
               />
               <TextField
@@ -217,9 +283,8 @@ function Main() {
                 varient="filled"
                 type="text"
                 name="Destination"
-                onChange={updateSearch}
               />
-              <Button variant="contained" type="submit" onClick={searchRides}>
+              <Button variant="contained" type="submit">
                 {' '}
                 Go!
                 {' '}
