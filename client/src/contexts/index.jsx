@@ -1,5 +1,5 @@
 import React, {
-  useState, useEffect, useMemo,
+  useState, useEffect,
 } from 'react';
 import {
   collection,
@@ -13,10 +13,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  sendPasswordResetEmail,
   onAuthStateChanged,
-  updatePassword as updatepassword,
-  updateEmail as updateemail,
   updateProfile as updateprofile,
 } from 'firebase/auth';
 import { auth, db } from '../firebase';
@@ -44,18 +41,6 @@ export function AuthProvider({ children }) {
     return signOut(auth);
   }
 
-  function resetPassword(email) {
-    return sendPasswordResetEmail(auth, email);
-  }
-
-  function updateEmail(newEmail) {
-    return updateemail(currentUser, newEmail);
-  }
-
-  function updatePassword(newPassword) {
-    return updatepassword(currentUser, newPassword);
-  }
-  // {displayName: 'displayName', photoURL: 'urlHere'}
   function updateProfile(updatesObj) {
     return updateprofile(currentUser, updatesObj);
   }
@@ -87,7 +72,7 @@ export function AuthProvider({ children }) {
   }
 
   function addMessage(body) {
-    addDoc(messagesCollectionReference, body);
+    return addDoc(messagesCollectionReference, body);
   }
 
   function getMessages(params) {
@@ -107,14 +92,11 @@ export function AuthProvider({ children }) {
     return unsubscribe;
   }, []);
 
-  const value = useMemo(() => ({
+  const value = {
     currentUser,
     login,
     signup,
     logout,
-    resetPassword,
-    updateEmail,
-    updatePassword,
     updateProfile,
     getUser,
     updateUser,
@@ -125,7 +107,7 @@ export function AuthProvider({ children }) {
     addMessage,
     getMessages,
     getContacts,
-  }), []);
+  };
 
   return (
     <AuthContext.Provider value={value}>
