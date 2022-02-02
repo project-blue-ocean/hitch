@@ -153,6 +153,7 @@ function Main() {
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     backgroundPosition: 'center center',
+    justifyContent: 'center',
   };
 
   return (
@@ -165,9 +166,23 @@ function Main() {
           textAlign: 'center',
         }}
       >
-        {/* <h1> Hitch(not a dating app)</h1> */}
-        {showMap
-          && <div style={{ paddingTop: '10px' }}><Map location={location} startCoords={startCoords} endCoords={endCoords} /></div>}
+        {showMap ? (
+          <div style={{ paddingTop: '10px' }}>
+            <Map location={location} startCoords={startCoords} endCoords={endCoords} />
+          </div>
+        )
+          : (
+            <div
+              style={{
+                width: '70vw',
+                height: '50vw',
+                maxWidth: '400px',
+                maxHeight: '300px',
+              }}
+            >
+              <h1>Hitch</h1>
+            </div>
+          )}
 
         <div className="search-box" style={styles}>
           {showRides ? (
