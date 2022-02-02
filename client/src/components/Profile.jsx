@@ -19,7 +19,7 @@ function Profile() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [profile, setProfile] = useState({});
-  const { getProfile, currentUser } = useContext(AuthContext);
+  const { getProfile, currentUser, getReviews } = useContext(AuthContext);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const location = useLocation();
@@ -37,11 +37,20 @@ function Profile() {
       .catch((err) => err);
   }, []);
 
+  useEffect(() => {
+    getReviews(id)
+      .then((userReviews) => {
+        // setReviews(userReviews);
+      })
+      .catch((err) => err);
+  }, []);
+
   const handleMessage = () => {
     const { userId } = profile;
     navigate('/messages', { userId });
   };
   const profileImage = profile && profile.image ? profile.image.url : null;
+
 
   return (
     <Container component="main" maxWidth="auto">
@@ -80,7 +89,7 @@ function Profile() {
         <Button variant="outlined" onClick={handleOpen} sx={{ flexGrow: 1, mt: 1 }}>
           Write a Review
         </Button>
-        <ReviewModal handleClose={handleClose} open={open} profile={profile} />
+        <ReviewModal handleClose={handleClose} open={open} prof={profile} />
         <Box sx={{ flexGrow: 1, mt: 2 }}>
           <Grid container spacing={2}>
             <Grid item xs={6}>
