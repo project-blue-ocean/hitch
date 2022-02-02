@@ -1,5 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
-// import mapboxgl from 'mapbox-gl/dist/mapbox-gl';
+import React, { useRef, useEffect } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import axios from 'axios';
 import mapboxgl from '!mapbox-gl';
@@ -89,8 +88,4 @@ export default function Map({ location, startCoords, endCoords }) {
       <div ref={mapContainer} style={{ height: '200px', width: '400px' }} className="map-container" />
     </div>
   );
-
-  // return (
-  //   <div>hello</div>
-  // )
 }
