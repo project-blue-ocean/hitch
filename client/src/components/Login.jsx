@@ -32,7 +32,6 @@ function Login() {
       setLoading(true);
       return login(email, password)
         .then((userCredential) => {
-          const { user } = userCredential;
           navigate('/');
         })
         .catch((err) => {
