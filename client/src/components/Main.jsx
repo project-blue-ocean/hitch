@@ -27,10 +27,6 @@ function Main() {
   const [showRides, setShowRides] = useState(false);
   const [showMap, setMap] = useState(false);
   const [profilepic, setprofilepic] = useState('');
-  const [searchTerm, setSearchTerm] = useState({
-    source: '',
-    destination: '',
-  });
   const [location, setLocation] = useState({
     longitude: 0,
     latitude: 0,
@@ -73,7 +69,7 @@ function Main() {
         latitude: endResponse.data.features[0].bbox[1],
       });
     }
-  }
+  };
 
   const searchRides = async (from) => {
     const data = await getRides(from);
@@ -86,7 +82,6 @@ function Main() {
     const formData = new FormData(e.currentTarget);
     const from = formData.get('From');
     const destination = formData.get('Destination');
-    setSearchTerm({ source: from, destination });
     searchRides(from, destination);
     getCoordinates(from, destination);
   };
@@ -95,7 +90,7 @@ function Main() {
     getProfile(id)
       .then((userProfile) => {
         setProfile(userProfile.data());
-        console.log(userProfile.data())
+        setprofilepic(userProfile.data().image.url);
       })
       .catch((err) => err);
   };
@@ -124,7 +119,6 @@ function Main() {
 
   useEffect(() => {
     getLocation();
-    return () => { };
   }, []);
 
   const modalStyle = {
@@ -194,13 +188,6 @@ function Main() {
                 sx={{ width: '50%' }}
                 variant="contained"
                 type="submit"
-                onClick={() => {
-                  setShowRides(false);
-                  setSearchTerm({
-                    source: '',
-                    destination: '',
-                  });
-                }}
               >
                 Change Search
               </Button>

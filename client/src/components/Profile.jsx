@@ -26,20 +26,15 @@ function Profile() {
   const { id } = location.state;
 
   useEffect(() => {
-    console.log(currentUser.uid);
-    if (id === undefined) {
-      getProfile(id)
-        .then((userProfile) => {
-          setProfile(userProfile.data());
-        })
-        .catch((err) => err);
-    } else {
-      getProfile('EIFN7TavBfC4gQMR9uGC')
-        .then((userProfile) => {
-          setProfile(userProfile.data());
-        })
-        .catch((err) => err);
-    }
+    // console.log(currentUser.uid);
+    // ! currentUser.uid , id
+    const userId = id || currentUser.uid;
+
+    getProfile(userId)
+      .then((userProfile) => {
+        setProfile(userProfile.data());
+      })
+      .catch((err) => err);
   }, []);
 
   const handleMessage = () => {
