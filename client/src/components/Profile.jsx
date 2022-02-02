@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,16 +10,27 @@ import Rating from '@mui/material/Rating';
 import Carousel from 'react-material-ui-carousel';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
-
+import { AuthContext } from '../contexts/index.jsx';
 import ReviewModal from './ReviewModal.jsx';
 import ReviewCard from './ReviewCard.jsx';
-import { reviews, profile } from './profileDummy.js';
+import { reviews } from './profileDummy.js';
 
 function Profile() {
   const navigate = useNavigate();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [profile, setProfile] = useState({});
+  const { getProfile } = useContext(AuthContext);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  useEffect(() => {
+    getProfile('wTNTNk9WndF91iuHDyym')
+      .then((userProfile) => {
+        setProfile(userProfile.data());
+      })
+      .catch((err) => err);
+  }, []);
+
   const handleMessage = () => {
     const { userId } = profile;
     navigate('/messages', { userId });
@@ -40,7 +51,7 @@ function Profile() {
           width: 250,
           height: 250,
           borderRadius: 1,
-          backgroundImage: `url(${profile.image.url})`,
+          backgroundImage: `url(${profile.url})`,
           backgroundRepeat: 'no-repeat',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
@@ -71,7 +82,7 @@ function Profile() {
                 {' '}
                 {profile.riderRating}
               </Typography>
-              <Rating name="rider" value={profile.riderRating} readOnly precision={0.5} />
+              <Rating name="rider" value={parseInt(profile.riderRating)} readOnly precision={0.5} />
             </Grid>
             <Grid item xs={6}>
               <Typography component="legend">
@@ -79,7 +90,7 @@ function Profile() {
                 {' '}
                 {profile.driverRating}
               </Typography>
-              <Rating name="driver" value={profile.driverRating} readOnly precision={0.5} />
+              <Rating name="driver" value={parseInt(profile.driverRating)} readOnly precision={0.5} />
             </Grid>
           </Grid>
         </Box>

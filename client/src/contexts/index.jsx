@@ -8,6 +8,9 @@ import {
   getDocs,
   updateDoc,
   doc,
+  onSnapshot,
+  query,
+  where,
 } from '@firebase/firestore';
 import {
   createUserWithEmailAndPassword,
@@ -45,6 +48,11 @@ export function AuthProvider({ children }) {
     return updateprofile(currentUser, updatesObj);
   }
 
+  function getProfile(params) {
+    const profRef = doc(db, 'profile', params);
+    return getDoc(profRef);
+  }
+
   function updateUser(body) {
     const userDoc = doc(db, 'users', body.id);
     return updateDoc(userDoc, body);
@@ -59,21 +67,35 @@ export function AuthProvider({ children }) {
     return addDoc(ridesCollectionReference, body);
   }
 
-  function getRides(params) {
-    return getDoc(ridesCollectionReference, params);
+  async function getRides(params) {
+    const rides = [];
+    const q = query(ridesCollectionReference, where('start', '==', params));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((ride) => {
+      rides.push(ride.data());
+    });
+    return rides;
   }
 
   function addReview(body) {
     return addDoc(reviewsCollectionReference, body);
   }
 
-  function getReviews(params) {
-    return getDocs(reviewsCollectionReference, params);
+  async function getReviews(params) {
+    const reviews = [];
+    const reviewsSnapshot = await getDocs(reviewsCollectionReference, params);
+    reviewsSnapshot.forEach((review) => {
+      reviews.push(review.data());
+    });
+    return reviews;
   }
 
   function addMessage(body) {
     return addDoc(messagesCollectionReference, body);
   }
+  // function getMessages(params) {
+  //   return getDocs(messagesCollectionReference, params);
+  // }
 
   function getMessages(params) {
     return getDocs(messagesCollectionReference, params);
@@ -107,7 +129,9 @@ export function AuthProvider({ children }) {
     addMessage,
     getMessages,
     getContacts,
+    getProfile,
   };
+
 
   return (
     <AuthContext.Provider value={value}>
