@@ -74,7 +74,7 @@ function Main() {
     }
   }
 
-  const searchRides = async (from, destination) => {
+  const searchRides = async (from) => {
     const data = await getRides(from);
     setRides(data);
     if (data.length > 0) setShowRides(true);
@@ -83,8 +83,8 @@ function Main() {
   const submitForm = (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const from = formData.get('From').toLowerCase();
-    const destination = formData.get('Destination').toLowerCase();
+    const from = formData.get('From');
+    const destination = formData.get('Destination');
     setSearchTerm({ source: from, destination });
     searchRides(from, destination);
     getCoordinates(from, destination);
@@ -125,11 +125,13 @@ function Main() {
   }, []);
 
   const modalStyle = {
+    display: 'grid',
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: '50vw',
+    height: '50vh',
     bgcolor: 'background.paper',
     border: '2px solid #4169E1',
     boxShadow: 24,
@@ -139,7 +141,7 @@ function Main() {
 
   const styles = {
     width: '50%',
-    minWidth: '380px',
+    minWidth: '50vw',
     margin: 'auto',
     paddingTop: '50px',
   };
@@ -151,6 +153,7 @@ function Main() {
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     backgroundPosition: 'center center',
+    justifyContent: 'center',
   };
 
   return (
@@ -163,9 +166,23 @@ function Main() {
           textAlign: 'center',
         }}
       >
-        {/* <h1> Hitch(not a dating app)</h1> */}
-        {showMap
-          && <div style={{ paddingTop: '10px' }}><Map location={location} startCoords={startCoords} endCoords={endCoords} /></div>}
+        {showMap ? (
+          <div style={{ paddingTop: '10px' }}>
+            <Map location={location} startCoords={startCoords} endCoords={endCoords} />
+          </div>
+        )
+          : (
+            <div
+              style={{
+                width: '70vw',
+                height: '50vw',
+                maxWidth: '400px',
+                maxHeight: '300px',
+              }}
+            >
+              <h1>Hitch</h1>
+            </div>
+          )}
 
         <div className="search-box" style={styles}>
           {showRides ? (
@@ -303,13 +320,30 @@ function Main() {
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
               <div>
                 <Avatar alt={profile.name} src={profile.image} />
-                <Link to="/my-profile" state={{ id: profile.userId }}>
-                  {profile.name}
-                </Link>
+                {' '}
+                Driver:
+                {profile.name}
+                {' '}
               </div>
+
               <Rating name="rating" value={Number(profile.driverRating)} readOnly precision={0.5} />
-              <Link to="/messages" state={{ id: profile.userId }}>
-                <div>message</div>
+            </Typography>
+            <Typography>
+              <Link to="/my-profile" state={{ id: profile.userId }} style={{ textDecoration: 'none' }}>
+                <Button
+                  sx={{ width: '150px' }}
+                  variant="contained"
+                >
+                  Go to Profile
+                </Button>
+              </Link>
+              <Link to="/messages" state={{ id: profile.userId }} style={{ textDecoration: 'none' }}>
+                <Button
+                  sx={{ width: '150px' }}
+                  variant="contained"
+                >
+                  message
+                </Button>
               </Link>
             </Typography>
           </Box>
