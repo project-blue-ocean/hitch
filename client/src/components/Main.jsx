@@ -164,7 +164,7 @@ function Main() {
         }}
       >
         {showMap ? (
-          <div style={{ paddingTop: '10px' }}>
+          <div style={{ marginTop: '10px', border: 'solid 2px black', overflow: 'hidden' }}>
             <Map location={location} startCoords={startCoords} endCoords={endCoords} />
           </div>
         )
