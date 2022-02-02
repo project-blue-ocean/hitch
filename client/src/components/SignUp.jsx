@@ -51,55 +51,41 @@ function SignUp() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (password !== passwordConfirmation) {
-      return setError('Passwords do not match');
-    }
     try {
+      e.preventDefault();
+      if (password !== passwordConfirmation) {
+        return setError('Passwords do not match');
+      }
       setLoading(true);
-      await signup(email, password)
-        .then((userCredential) => {
-          const { user } = userCredential;
-          return createUser({
-            firstName, lastName, email, dob, id: user.uid,
-          })
-            .then(() => uploadAvatar(user.uid, avatar));
-        })
-        .then((uploadResult) => {
-          console.log('uploadResult', uploadResult);
-          const displayName = [firstName, lastName].join(' ');
-          // TODO: add link to photoURL
-          const photoURL = 'TODO';
-          return updateProfile({ displayName });
-        })
-        .then(() => {
-          navigate('/login'); // redirect where you would like
-        })
-        .catch((err) => {
-          switch (err.code) {
-            case 'auth/email-already-in-use':
-              setError(`Email address ${email} already in use.`);
-              break;
-            case 'auth/invalid-email':
-              setError(`Email address ${email} is invalid.`);
-              break;
-            case 'auth/operation-not-allowed':
-              setError('Error during sign up.');
-              break;
-            case 'auth/weak-password':
-              setError('Password is not strong enough. Add additional characters including special characters and numbers.');
-              break;
-            default:
-              console.error(err.code, err.message);
-              setError(err.message);
-              break;
-          }
-        })
-        .then(() => {
-          setLoading(false);
-        });
-    } catch {
-      return setError('Failed to create an account');
+      const userCredential = await signup(email, password);
+      const { user } = userCredential;
+      await createUser({ firstName, lastName, email, dob, id: user.uid });
+      const uploadResult = await uploadAvatar(user.uid, avatar);
+      console.log('uploadResult', uploadResult);
+      const displayName = [firstName, lastName].join(' ');
+      await updateProfile({ displayName });
+      await navigate('/login');
+    } catch (err) {
+      switch (err.code) {
+        case 'auth/email-already-in-use':
+          setError(`Email address ${email} already in use.`);
+          break;
+        case 'auth/invalid-email':
+          setError(`Email address ${email} is invalid.`);
+          break;
+        case 'auth/operation-not-allowed':
+          setError('Error during sign up.');
+          break;
+        case 'auth/weak-password':
+          setError('Password is not strong enough. Add additional characters including special characters and numbers.');
+          break;
+        default:
+          console.error(err.code, err.message);
+          setError(err.message);
+          break;
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
