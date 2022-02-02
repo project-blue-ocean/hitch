@@ -10,32 +10,46 @@ import {
 } from '@material-ui/core';
 import Message from './Message.jsx';
 import UserContacted from './UserContacted.jsx';
-import dummyData from '../../../messagesDummyData';
-
 import { AuthContext } from '../contexts/index.jsx';
-
+import dummyData from '../../../messagesDummyData';
 
 function Messages({ userId }) {
   const [usersContacted, setUsersContacted] = useState(dummyData.usersContacted);
   const [messages, setMessages] = useState(dummyData.messages);
   const [userContactedId, setUserContactedId] = useState(null);
-  //  alex test
-  // Context
-  const { getUser } = useContext(AuthContext);
-
-  // getUser('1NsyaeVqmEIcvrcdH9AQ')
-  //   .then((user) => console.log(user.data()))
-  //   .catch((err) => console.log(err))
-
-  // alex test
+  const { currentUser, addMessage, getMessages } = useContext(AuthContext);
 
   // const getUsersContacted = () => {
   //   return false;
   // };
 
-  // const getMessages = (userContactedId) => {
-  //   return false;
-  // };
+  useEffect(() => {
+    // getMessages({senderId: userContactedId, recieverId: currentUser.uid })
+    if (userContactedId !== null) {
+
+      getMessages({ senderId: 1, receiverId: 2 })
+        .then((allMessages) => {
+          console.log('all messages', allMessages);
+    })
+        .catch((err) => err);
+  }
+    }, []);
+
+
+
+
+  const sendMessage = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const messageToSend = {
+      message: data.get('message'),
+    };
+    addMessage(messageToSend)
+      .then((message) => {
+        console.log(message);
+      })
+      .catch((err) => console.log(err));
+  };
 
   const messagesEndRef = React.useRef();
 
@@ -73,12 +87,12 @@ function Messages({ userId }) {
             <div ref={messagesEndRef} />
           </List>
           <Divider />
-          <Grid container style={{ padding: '20px' }}>
+          <Grid container component="form" onSubmit={sendMessage} style={{ padding: '20px' }}>
             <Grid item xs={11}>
-              <TextField id="outlined-basic-email" fullWidth />
+              <TextField id="message" name="message" autoComplete="off" required fullWidth />
             </Grid>
             <Grid xs={1} align="right">
-              <Fab color="primary" aria-label="add">Send</Fab>
+              <Fab type="submit" color="primary" aria-label="add">Send</Fab>
             </Grid>
           </Grid>
         </Grid>

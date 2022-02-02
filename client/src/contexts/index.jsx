@@ -93,12 +93,17 @@ export function AuthProvider({ children }) {
   function addMessage(body) {
     return addDoc(messagesCollectionReference, body);
   }
-  // function getMessages(params) {
-  //   return getDocs(messagesCollectionReference, params);
-  // }
 
-  function getMessages(params) {
-    return getDocs(messagesCollectionReference, params);
+  async function getMessages(params) {
+    //  get all messages id = sender id;get all messages id = reciever id;
+    const messages = [];
+    const q = query(collection(db, 'messages'), where('receiverId', '==', params.receiverId), where('senderId', '==', params.senderId));
+    const unsubscribe = await onSnapshot(q);
+    unsubscribe.forEach((docs) => {
+      messages.push(docs.data());
+    });
+    console.log(messages)
+    return messages;
   }
 
   function getContacts(params) {
