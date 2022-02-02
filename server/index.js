@@ -2,6 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const morgan = require('morgan');
 const path = require('path');
+const compression = require('compression');
 const dummy = require('./rideSamples.js');
 const fakeprofile = require('./profileSamples.js');
 
@@ -9,6 +10,7 @@ const app = express();
 const config = require('../config');
 
 // Middleware
+app.use(compression());
 app.use(express.json());
 app.use(morgan('dev'));
 

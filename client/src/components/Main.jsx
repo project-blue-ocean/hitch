@@ -15,8 +15,8 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Modal from '@mui/material/Modal';
 import Rating from '@mui/material/Rating';
 import axios from 'axios';
-import van from '../assets/road1.jpeg';
 import Map from './Map.jsx';
+import van from '../assets/van1.png';
 import { AuthContext } from '../contexts/index.jsx';
 
 function Main() {
@@ -43,7 +43,7 @@ function Main() {
     latitude: 0,
   });
 
-  const getCoordinates = async(from, destination) => {
+  const getCoordinates = async (from, destination) => {
     if (from !== '' && destination === '') {
       const sourceResponse = await axios.get('/coords', { params: { location: from } });
       await setStart({
@@ -75,19 +75,9 @@ function Main() {
   }
 
   const searchRides = async (from, destination) => {
-    const response = await axios.get('/rides', {
-      params: {
-        search: {
-          source: from,
-          destination,
-        },
-      },
-    });
-    const { data } = response;
+    const data = await getRides(from);
     setRides(data);
-    if (data.length > 0) {
-      setShowRides(true);
-    }
+    if (data.length > 0) setShowRides(true);
   };
 
   const submitForm = (e) => {
@@ -101,7 +91,7 @@ function Main() {
   };
 
   const getUserProfile = (id) => {
-    getProfile('wTNTNk9WndF91iuHDyym')
+    getProfile(id)
       .then((userProfile) => {
         setProfile(userProfile.data());
       })
@@ -151,7 +141,7 @@ function Main() {
     width: '50%',
     minWidth: '380px',
     margin: 'auto',
-    paddingTop: '150px',
+    paddingTop: '50px',
   };
 
   const mainStyle = {
@@ -175,7 +165,7 @@ function Main() {
       >
         {/* <h1> Hitch(not a dating app)</h1> */}
         {showMap
-          && <Map location={location} startCoords={startCoords} endCoords={endCoords} />}
+          && <div style={{ paddingTop: '10px' }}><Map location={location} startCoords={startCoords} endCoords={endCoords} /></div>}
 
         <div className="search-box" style={styles}>
           {showRides ? (
@@ -313,12 +303,14 @@ function Main() {
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
               <div>
                 <Avatar alt={profile.name} src={profile.image} />
-                <Link to={`/profile/${profile.userId}`}>
+                <Link to="/my-profile" state={{ id: profile.userId }}>
                   {profile.name}
                 </Link>
               </div>
               <Rating name="rating" value={Number(profile.driverRating)} readOnly precision={0.5} />
-              <div>message</div>
+              <Link to="/messages" state={{ id: profile.userId }}>
+                <div>message</div>
+              </Link>
             </Typography>
           </Box>
         </Modal>

@@ -12,7 +12,7 @@ function MenuOption() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
-  const { logout } = useContext(AuthContext);
+  const { logout, currentUser } = useContext(AuthContext);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -25,7 +25,7 @@ function MenuOption() {
   };
   const handleProfile = () => {
     setAnchorEl(null);
-    navigate('/my-profile');
+    navigate('/my-profile', { state: { id: currentUser.uid } });
   };
   const handleMessages = () => {
     setAnchorEl(null);
