@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import CssBaseline from '@mui/material/CssBaseline';
 import { AuthContext } from '../contexts/index.jsx';
 import logo from '../assets/logo.png';
+import bg from '../assets/menu1.jpeg';
 
 function MenuOption() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -45,15 +46,25 @@ function MenuOption() {
   if (location.pathname === '/login' || location.pathname === '/signup') {
     return <div />;
   }
+  const menustyle = {
+    height: '12vh',
+    backgroundImage: `url("${bg}")`,
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center center',
+    justifyContent: 'space-evenly',
+  };
 
   return (
-    <nav>
+    <nav style={menustyle}>
       <CssBaseline />
       <Typography component="h1" variant="h3">
         <img alt="logo" src={logo} width="90vw" />
       </Typography>
       <Button
         id="basic-button"
+        variant="outlined"
+        sx={{ background: 'pink', opacity: '.8' }}
         aria-controls={open ? 'basic-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
