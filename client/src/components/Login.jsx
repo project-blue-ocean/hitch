@@ -17,10 +17,8 @@ function Login() {
   const [password, setPassword] = useState();
   const [error, setError] = useState('');
   const [isLoading, setLoading] = useState(false);
-
   // Context
   const { login } = useContext(AuthContext);
-
   // Methods
   const onChange = (e) => {
     const { id, value } = e.target;
@@ -32,8 +30,8 @@ function Login() {
     e.preventDefault();
     try {
       setLoading(true);
-      login(email, password)
-        .then(() => {
+      return login(email, password)
+        .then((userCredential) => {
           navigate('/');
         })
         .catch((err) => {

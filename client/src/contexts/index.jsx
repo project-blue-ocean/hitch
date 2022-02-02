@@ -20,7 +20,9 @@ import {
   onAuthStateChanged,
   updateProfile as updateprofile,
 } from 'firebase/auth';
-import { auth, db } from '../firebase';
+
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { auth, db, storage } from '../firebase';
 
 const ridesCollectionReference = collection(db, 'rides');
 const reviewsCollectionReference = collection(db, 'reviews');
@@ -33,6 +35,7 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
 
+  // Authorization
   function signup(email, password) {
     return createUserWithEmailAndPassword(auth, email, password);
   }
@@ -46,7 +49,23 @@ export function AuthProvider({ children }) {
   }
 
   function updateProfile(updatesObj) {
-    return updateprofile(currentUser, updatesObj);
+    const user = auth.currentUser;
+    return updateprofile(user, updatesObj);
+  }
+
+  function uploadAvatar(uid, file) {
+    const storageRef = ref(storage, `users/${uid}/${file.name}`);
+    return uploadBytes(storageRef, file).then(() => getDownloadURL(ref(storage, `users/${uid}/${file.name}`)));
+  }
+
+  // User
+  function addProfile(body) {
+    return addDoc(collection(db, 'profile'), body);
+  }
+
+  function getProfile(params) {
+    const profRef = doc(db, 'profile', params);
+    return getDoc(profRef);
   }
 
   function updateUser(body) {
@@ -59,25 +78,42 @@ export function AuthProvider({ children }) {
     return getDoc(docRef);
   }
 
+  // Rides
   function addRide(body) {
     return addDoc(ridesCollectionReference, body);
   }
 
-  function getRides(params) {
-    return getDoc(ridesCollectionReference, params);
+  async function getRides(params) {
+    const rides = [];
+    const q = query(ridesCollectionReference, where('start', '==', params));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((ride) => {
+      rides.push(ride.data());
+    });
+    return rides;
   }
 
+  // Reviews
   function addReview(body) {
     return addDoc(reviewsCollectionReference, body);
   }
 
-  function getReviews(params) {
-    return getDocs(reviewsCollectionReference, params);
+  async function getReviews(params) {
+    const reviews = [];
+    const reviewsSnapshot = await getDocs(reviewsCollectionReference, params);
+    reviewsSnapshot.forEach((review) => {
+      reviews.push(review.data());
+    });
+    return reviews;
   }
 
+  // Messages
   function addMessage(body) {
     return addDoc(messagesCollectionReference, body);
   }
+  // function getMessages(params) {
+  //   return getDocs(messagesCollectionReference, params);
+  // }
 
   function getMessages(params, callback) {
     console.log(params);
@@ -110,6 +146,8 @@ export function AuthProvider({ children }) {
     signup,
     logout,
     updateProfile,
+    uploadAvatar,
+    addProfile,
     getUser,
     updateUser,
     addRide,
@@ -119,7 +157,9 @@ export function AuthProvider({ children }) {
     addMessage,
     getMessages,
     getContacts,
+    getProfile,
   };
+
 
   return (
     <AuthContext.Provider value={value}>

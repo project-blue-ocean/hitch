@@ -13,6 +13,9 @@ import UserContacted from './UserContacted.jsx';
 import { AuthContext } from '../contexts/index.jsx';
 import dummyData from '../../../messagesDummyData';
 
+import { AuthContext } from '../contexts/index.jsx';
+
+
 function Messages({ userId }) {
   const [usersContacted, setUsersContacted] = useState(dummyData.usersContacted);
   const [messages, setMessages] = useState([]);
