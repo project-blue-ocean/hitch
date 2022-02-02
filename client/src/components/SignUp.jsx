@@ -23,13 +23,14 @@ function SignUp() {
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [dob, setDOB] = useState('');
   const [avatar, setAvatar] = useState('');
+  const [bio, setBio] = useState('');
 
   const [error, setError] = useState('');
   const [isLoading, setLoading] = useState(false);
 
   // Context
   const {
-    signup, createUser, updateProfile, uploadAvatar,
+    signup, addProfile, updateProfile, uploadAvatar,
   } = useContext(AuthContext);
 
   // Methods
@@ -41,6 +42,7 @@ function SignUp() {
     if (id === 'password') setPassword(value);
     if (id === 'passwordConfirmation') setPasswordConfirmation(value);
     if (id === 'dob') setDOB(value);
+    if (id === 'bio') setBio(value);
   };
 
   const onImageChange = (e) => {
@@ -59,11 +61,13 @@ function SignUp() {
       setLoading(true);
       const userCredential = await signup(email, password);
       const { user } = userCredential;
-      await createUser({ firstName, lastName, email, dob, id: user.uid });
-      const uploadResult = await uploadAvatar(user.uid, avatar);
-      console.log('uploadResult', uploadResult);
-      const displayName = [firstName, lastName].join(' ');
-      await updateProfile({ displayName });
+      const photoURL = await uploadAvatar(user.uid, avatar);
+      const name = [firstName, lastName].join(' ');
+      const age = new Date().getFullYear() - dob.getFullYear();
+      await addProfile({
+        userId: user.uid, name, image: { url: photoURL }, age, bio, riderRating: 0, driverRating: 0,
+      });
+      await updateProfile({ displayName: name, photoURL });
       await navigate('/login');
     } catch (err) {
       switch (err.code) {
@@ -166,6 +170,18 @@ function SignUp() {
               />
             </Grid>
             <Grid item xs={12}>
+              <TextField
+                required
+                name="bio"
+                id="bio"
+                fullWidth
+                label="Bio"
+                placeholder="Tell us about yourself!"
+                multiline
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
               <>
                 <input
                   accept="image/*"
@@ -181,7 +197,7 @@ function SignUp() {
                 </label>
               </>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 required
                 id="dob"
@@ -195,7 +211,6 @@ function SignUp() {
               />
             </Grid>
           </Grid>
-
           <Button
             type="submit"
             disabled={isLoading}
