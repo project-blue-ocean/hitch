@@ -26,7 +26,6 @@ function Messages({ userId }) {
   useEffect(() => {
     // getMessages({senderId: userContactedId, recieverId: currentUser.uid })
     if (userContactedId !== null) {
-
       getMessages({ senderId: 1, receiverId: 2 })
         .then((allMessages) => {
           console.log('all messages', allMessages);
