@@ -55,8 +55,8 @@ export function AuthProvider({ children }) {
   }
 
   // User
-  function createUser(body) {
-    return addDoc(collection(db, 'users'), body);
+  function addProfile(body) {
+    return addDoc(collection(db, 'profile'), body);
   }
 
   function updateUser(body) {
@@ -116,7 +116,7 @@ export function AuthProvider({ children }) {
     logout,
     updateProfile,
     uploadAvatar,
-    createUser,
+    addProfile,
     getUser,
     updateUser,
     addRide,
