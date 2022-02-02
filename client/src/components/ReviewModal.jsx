@@ -91,7 +91,7 @@ export default function ReviewModal({ handleClose, open, profile }) {
             name="half-rating"
             precision={0.5}
             size="large"
-            valuse={value}
+            value={value}
             onChange={(event, newValue) => {
               setValue(newValue);
             }}
