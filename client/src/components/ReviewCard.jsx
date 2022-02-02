@@ -12,6 +12,7 @@ function stringToColor(string) {
   let hash = 0;
   let i;
 
+
   for (i = 0; i < string.length; i += 1) {
     hash = string.charCodeAt(i) + ((hash << 5) - hash);
   }
@@ -28,7 +29,7 @@ function stringToColor(string) {
 
 export default function ReviewCard(review) {
   const name = review.review.reviewerName;
-  const rating = review.review.riderRating;
+  const rating = review.review.startRating;
   const reviewText = review.review.text;
   const date = new Date(review.review.date);
   const fullName = name.split(' ');

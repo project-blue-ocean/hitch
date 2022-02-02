@@ -19,26 +19,37 @@ function Profile() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [profile, setProfile] = useState({});
-  const { getProfile } = useContext(AuthContext);
+  // const [reviews, setReviews] = useState([]);
+
+  const { getProfile, getReviews } = useContext(AuthContext);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const location = useLocation();
   const { id } = location.state;
 
   useEffect(() => {
-    if (id) {
+    if (id !== undefined) {
       getProfile(id)
         .then((userProfile) => {
           setProfile(userProfile.data());
         })
         .catch((err) => err);
     } else {
-      getProfile('h5WyNDhKFC6mDuOH5UVu')
+      getProfile('vyav0C4jNlXzSph16wdi4A1gqsA2')
         .then((userProfile) => {
           setProfile(userProfile.data());
         })
         .catch((err) => err);
     }
+  }, []);
+
+  useEffect(() => {
+    getReviews(id)
+      .then((userReviews) => {
+        console.log(userReviews);
+        // setReviews(userReviews);
+      })
+      .catch((err) => err);
   }, []);
 
   const handleMessage = () => {
@@ -83,7 +94,7 @@ function Profile() {
         <Button variant="outlined" onClick={handleOpen} sx={{ flexGrow: 1, mt: 1 }}>
           Write a Review
         </Button>
-        <ReviewModal handleClose={handleClose} open={open} profile={profile} />
+        <ReviewModal handleClose={handleClose} open={open} prof={profile} />
         <Box sx={{ flexGrow: 1, mt: 2 }}>
           <Grid container spacing={2}>
             <Grid item xs={6}>
