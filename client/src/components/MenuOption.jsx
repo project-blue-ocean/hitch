@@ -25,7 +25,7 @@ function MenuOption() {
   };
   const handleProfile = () => {
     setAnchorEl(null);
-    navigate('/my-profile');
+    navigate('/my-profile/:id', { state: { id: 'h5WyNDhKFC6mDuOH5UVu' } });
   };
   const handleMessages = () => {
     setAnchorEl(null);

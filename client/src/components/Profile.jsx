@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
@@ -22,13 +22,23 @@ function Profile() {
   const { getProfile } = useContext(AuthContext);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const location = useLocation();
+  const { id } = location.state;
 
   useEffect(() => {
-    getProfile('wTNTNk9WndF91iuHDyym')
-      .then((userProfile) => {
-        setProfile(userProfile.data());
-      })
-      .catch((err) => err);
+    if (id !== null) {
+      getProfile(id)
+        .then((userProfile) => {
+          setProfile(userProfile.data());
+        })
+        .catch((err) => err);
+    } else {
+      getProfile('h5WyNDhKFC6mDuOH5UVu')
+        .then((userProfile) => {
+          setProfile(userProfile.data());
+        })
+        .catch((err) => err);
+    }
   }, []);
 
   const handleMessage = () => {
