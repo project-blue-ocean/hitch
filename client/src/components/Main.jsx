@@ -246,7 +246,9 @@ function Main() {
                 </Link>
               </div>
               <Rating name="rating" value={Number(profile.driverRating)} readOnly precision={0.5} />
-              <div>message</div>
+              <Link to="/messages" state={{ id: profile.userId }}>
+                <div>message</div>
+              </Link>
             </Typography>
           </Box>
         </Modal>
