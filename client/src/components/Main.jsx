@@ -26,6 +26,7 @@ function Main() {
   const [rides, setRides] = useState([]);
   const [showRides, setShowRides] = useState(false);
   const [showMap, setMap] = useState(false);
+  const [profilepic, setprofilepic] = useState('');
   const [searchTerm, setSearchTerm] = useState({
     source: '',
     destination: '',
@@ -90,16 +91,17 @@ function Main() {
     getCoordinates(from, destination);
   };
 
-  const getUserProfile = (id) => {
+  const getUserProfile = async (id) => {
     getProfile(id)
       .then((userProfile) => {
         setProfile(userProfile.data());
+        console.log(userProfile.data())
       })
       .catch((err) => err);
   };
 
-  const displayModal = (id) => {
-    getUserProfile(id);
+  const displayModal = async (id) => {
+    await getUserProfile(id);
     setShowDetails(true);
   };
 
@@ -122,6 +124,7 @@ function Main() {
 
   useEffect(() => {
     getLocation();
+    return () => { };
   }, []);
 
   const modalStyle = {
@@ -317,15 +320,12 @@ function Main() {
             <Typography id="modal-modal-title" variant="h6" component="h2">
               Driver Details
             </Typography>
+            <Avatar alt="userpic" src={profilepic} />
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              <div>
-                <Avatar alt={profile.name} src={profile.image} />
-                {' '}
-                Driver:
-                {profile.name}
-                {' '}
-              </div>
-
+              {' '}
+              Driver:
+              {profile.name}
+              {' '}
               <Rating name="rating" value={Number(profile.driverRating)} readOnly precision={0.5} />
             </Typography>
             <Typography>

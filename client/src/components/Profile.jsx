@@ -19,21 +19,22 @@ function Profile() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [profile, setProfile] = useState({});
-  const { getProfile } = useContext(AuthContext);
+  const { getProfile, currentUser } = useContext(AuthContext);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const location = useLocation();
   const { id } = location.state;
 
   useEffect(() => {
-    if (id) {
+    console.log(currentUser.uid);
+    if (id === undefined) {
       getProfile(id)
         .then((userProfile) => {
           setProfile(userProfile.data());
         })
         .catch((err) => err);
     } else {
-      getProfile('h5WyNDhKFC6mDuOH5UVu')
+      getProfile('EIFN7TavBfC4gQMR9uGC')
         .then((userProfile) => {
           setProfile(userProfile.data());
         })
@@ -45,6 +46,7 @@ function Profile() {
     const { userId } = profile;
     navigate('/messages', { userId });
   };
+  const profileImage = profile && profile.image ? profile.image.url : null;
 
   return (
     <Container component="main" maxWidth="auto">
@@ -61,7 +63,7 @@ function Profile() {
           width: 250,
           height: 250,
           borderRadius: 1,
-          backgroundImage: `url(${profile.url})`,
+          backgroundImage: `url(${profileImage})`,
           backgroundRepeat: 'no-repeat',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
