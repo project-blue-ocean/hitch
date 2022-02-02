@@ -1,5 +1,3 @@
-Review modal
-
 import React, { useContext, useState } from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
