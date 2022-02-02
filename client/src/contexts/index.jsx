@@ -20,7 +20,7 @@ import {
   updateProfile as updateprofile,
 } from 'firebase/auth';
 
-import { ref, uploadBytes } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { auth, db, storage } from '../firebase';
 
 const ridesCollectionReference = collection(db, 'rides');
@@ -60,19 +60,13 @@ export function AuthProvider({ children }) {
   }
 
   function updateProfile(updatesObj) {
-    return updateprofile(currentUser, updatesObj);
+    const user = auth.currentUser;
+    return updateprofile(user, updatesObj);
   }
 
-  /**
-   * uploads and image to the /images directory
-   * @param file - Blob | Uint8Array | ArrayBuffer
-  */
   function uploadAvatar(uid, file) {
     const storageRef = ref(storage, `users/${uid}/${file.name}`);
-    return uploadBytes(storageRef, file).then((snapshot) => {
-      console.log('Uploaded a blob or file!');
-      console.log(snapshot);
-    });
+    return uploadBytes(storageRef, file).then(() => getDownloadURL(ref(storage, `users/${uid}/${file.name}`)));
   }
 
   // User
@@ -130,7 +124,7 @@ export function AuthProvider({ children }) {
     return unsubscribe;
   }, []);
 
-  const value = useMemo(() => ({
+  const value = {
     currentUser,
     login,
     signup,
@@ -150,7 +144,7 @@ export function AuthProvider({ children }) {
     addMessage,
     getMessages,
     getContacts,
-  }), []);
+  };
 
   return (
     <AuthContext.Provider value={value}>
