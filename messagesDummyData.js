@@ -1,8 +1,8 @@
 const dummyData = {
   usersContacted: [
     {
-      id: 88,
-      senderName: 'Christopher McCandless',
+      id: 'PCb4oEvSJQVTTTk3KqYu0dZgmCI3',
+      senderName: 'Alex Huerta',
     },
   ],
   messages: [

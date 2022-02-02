@@ -15,28 +15,32 @@ import dummyData from '../../../messagesDummyData';
 
 function Messages({ userId }) {
   const [usersContacted, setUsersContacted] = useState(dummyData.usersContacted);
-  const [messages, setMessages] = useState(dummyData.messages);
-  const [userContactedId, setUserContactedId] = useState(null);
-  const { currentUser, addMessage } = useContext(AuthContext);
+  const [messages, setMessages] = useState([]);
+  const [userContactedId, setUserContactedId] = useState('null');
+  const { currentUser, addMessage, getMessages } = useContext(AuthContext);
 
   // const getUsersContacted = () => {
   //   return false;
   // };
 
-  // const getMessages = (userContactedId) => {
-  //   return false;
-  // };
+  useEffect(() => {
+    if (userContactedId !== null) {
+      getMessages(userContactedId + currentUser.uid, (updatedMessages) => {
+        setMessages(updatedMessages);
+      });
+    }
+  }, [userContactedId]);
 
   const sendMessage = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const messageToSend = {
       message: data.get('message'),
+      senderId: currentUser.uid,
+      chatid: [userContactedId + currentUser.uid, currentUser.uid + userContactedId],
+      time: new Date(),
     };
     addMessage(messageToSend)
-      .then((message) => {
-        console.log(message);
-      })
       .catch((err) => console.log(err));
   };
 
@@ -71,7 +75,7 @@ function Messages({ userId }) {
         <Grid item xs={9}>
           <List style={{ height: '70vh', overflowY: 'auto' }}>
             {messages.map((message) => (
-              <Message message={message} userId={userId} />
+              <Message message={message} userId={currentUser.uid} />
             ))}
             <div ref={messagesEndRef} />
           </List>

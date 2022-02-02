@@ -8,6 +8,9 @@ import {
   getDocs,
   updateDoc,
   doc,
+  onSnapshot,
+  query,
+  where,
 } from '@firebase/firestore';
 import {
   createUserWithEmailAndPassword,
@@ -75,8 +78,16 @@ export function AuthProvider({ children }) {
     return addDoc(messagesCollectionReference, body);
   }
 
-  function getMessages(params) {
-    return getDocs(messagesCollectionReference, params);
+  function getMessages(params, callback) {
+    console.log(params);
+    const q = query(collection(db, 'messages'), where('chatid', 'array-contains', params));
+    onSnapshot(q, (querySnapshot) => {
+      const messages = [];
+      querySnapshot.forEach((docs) => {
+        messages.push(docs.data());
+      });
+      callback(messages);
+    });
   }
 
   function getContacts(params) {
