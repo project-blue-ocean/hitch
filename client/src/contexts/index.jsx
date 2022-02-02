@@ -84,14 +84,16 @@ export function AuthProvider({ children }) {
     return addDoc(ridesCollectionReference, body);
   }
 
-  async function getRides(params) {
-    const rides = [];
+  function getRides(params) {
     const q = query(ridesCollectionReference, where('start', '==', params));
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((ride) => {
-      rides.push(ride.data());
-    });
-    return rides;
+    return getDocs(q)
+      .then((querySnapshot) => {
+        const rides = [];
+        querySnapshot.forEach((ride) => {
+          rides.push(ride.data());
+        });
+        return rides;
+      });
   }
 
   // Reviews
@@ -99,25 +101,23 @@ export function AuthProvider({ children }) {
     return addDoc(reviewsCollectionReference, body);
   }
 
-  async function getReviews(params) {
-    const reviews = [];
-    const reviewsSnapshot = await getDocs(reviewsCollectionReference, params);
-    reviewsSnapshot.forEach((review) => {
-      reviews.push(review.data());
-    });
-    return reviews;
+  function getReviews(params) {
+    return getDocs(reviewsCollectionReference, params)
+      .then((reviewsSnapshot) => {
+        const reviews = [];
+        reviewsSnapshot.forEach((review) => {
+          reviews.push(review.data());
+        });
+        return reviews;
+      });
   }
 
   // Messages
   function addMessage(body) {
     return addDoc(messagesCollectionReference, body);
   }
-  // function getMessages(params) {
-  //   return getDocs(messagesCollectionReference, params);
-  // }
 
   function getMessages(params, callback) {
-    console.log(params);
     const q = query(collection(db, 'messages'), orderBy('time'), where('chatd', 'array-contains', params));
     onSnapshot(q, (querySnapshot) => {
       const messages = [];
@@ -160,7 +160,6 @@ export function AuthProvider({ children }) {
     getContacts,
     getProfile,
   };
-
 
   return (
     <AuthContext.Provider value={value}>
