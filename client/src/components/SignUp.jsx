@@ -63,7 +63,8 @@ function SignUp() {
       const { user } = userCredential;
       const photoURL = await uploadAvatar(user.uid, avatar);
       const name = [firstName, lastName].join(' ');
-      const age = new Date().getFullYear() - dob.getFullYear();
+      // FIX: age may be off by 1
+      const age = (new Date().getFullYear()) - (new Date(dob).getFullYear());
       await addProfile({
         userId: user.uid, name, image: { url: photoURL }, age, bio, riderRating: 0, driverRating: 0,
       });
