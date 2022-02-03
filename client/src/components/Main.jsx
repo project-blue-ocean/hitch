@@ -14,10 +14,12 @@ import TextField from '@mui/material/TextField';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Modal from '@mui/material/Modal';
 import Rating from '@mui/material/Rating';
+import Autocomplete from '@mui/material/Autocomplete';
 import axios from 'axios';
 import Map from './Map.jsx';
 import van from '../assets/van1.png';
 import { AuthContext } from '../contexts/index.jsx';
+import UScityNames from '../assets/cities.js';
 
 function Main() {
   const { getRides, getProfile } = useContext(AuthContext);
@@ -71,8 +73,8 @@ function Main() {
     }
   };
 
-  const searchRides = async (from) => {
-    const data = await getRides(from);
+  const searchRides = async (from, destination) => {
+    const data = await getRides(from, destination);
     setRides(data);
     if (data.length > 0) setShowRides(true);
   };
@@ -273,22 +275,25 @@ function Main() {
               autoComplete="off"
               onSubmit={submitForm}
             >
-              <TextField
+              <Autocomplete
                 sx={{ background: 'white', opacity: '.9', borderRadius: '6px' }}
                 id="filled-basic"
-                label="Location"
-                varient="filled"
+                variant="filled"
                 type="text"
-                name="From"
                 autoFocus
+                disablePortal
+                options={UScityNames}
+                renderInput={(params) => <TextField {...params} name="From" label="From" />}
               />
-              <TextField
+              <Autocomplete
                 sx={{ background: 'white', opacity: '.9', borderRadius: '6px' }}
                 id="filled-basic"
-                label="Destination"
-                varient="filled"
+                variant="filled"
                 type="text"
-                name="Destination"
+                autoFocus
+                disablePortal
+                options={UScityNames}
+                renderInput={(params) => <TextField {...params} name="Destination" label="Destination" />}
               />
               <Button variant="contained" type="submit">
                 {' '}

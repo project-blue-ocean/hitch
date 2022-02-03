@@ -22,7 +22,7 @@ import {
   onAuthStateChanged,
   updateProfile as updateprofile,
 } from 'firebase/auth';
-
+import _ from 'lodash';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { auth, db, storage } from '../firebase';
 
@@ -86,16 +86,14 @@ export function AuthProvider({ children }) {
     return addDoc(ridesCollectionReference, body);
   }
 
-  function getRides(params) {
-    const q = query(ridesCollectionReference, where('start', '==', params));
+  function getRides(start, destination) {
+    const q = query(ridesCollectionReference, where('start', '==', start));
     return getDocs(q)
-      .then((querySnapshot) => {
-        const rides = [];
-        querySnapshot.forEach((ride) => {
-          rides.push(ride.data());
-        });
-        return rides;
-      });
+      .then((querySnapshot) => querySnapshot
+        .docs
+        .map((ride) => ride.data())
+        .filter((ride) => !destination || ride.destination === destination));
+        // TODO: handle queries w/ no start param
   }
 
   // Reviews
