@@ -14,7 +14,9 @@ import {
   DatePicker,
 } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import Autocomplete from '@mui/material/Autocomplete';
 import { AuthContext } from '../contexts/index.jsx';
+import UScityNames from '../assets/cities.js';
 
 function PostRide() {
   const [date, setDate] = useState(new Date());
@@ -53,10 +55,36 @@ function PostRide() {
         <Box component="form" onSubmit={handleFormOnSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TextField required fullWidth id="start" label="Departure City, State" name="start" autoComplete="start" autoFocus />
+              <Autocomplete
+                sx={{ background: 'white', opacity: '.9', borderRadius: '6px' }}
+                variant="filled"
+                type="text"
+                required
+                fullWidth
+                id="start"
+                label="Departure City, State"
+                autoComplete
+                autoFocus
+                disablePortal
+                options={UScityNames}
+                renderInput={(params) => <TextField {...params} name="start" label="Departure City, State" />}
+              />
             </Grid>
             <Grid item xs={12}>
-              <TextField required fullWidth id="destination" label="Destination City, State" name="destination" autoComplete="destination" />
+              <Autocomplete
+                sx={{ background: 'white', opacity: '.9', borderRadius: '6px' }}
+                variant="filled"
+                type="text"
+                required
+                fullWidth
+                id="destination"
+                label="Destination City, State"
+                autoComplete
+                autoFocus
+                disablePortal
+                options={UScityNames}
+                renderInput={(params) => <TextField {...params} name="destination" label="Destination City, State" />}
+              />
             </Grid>
             <Grid item xs={12}>
               <TextField required id="date" name="date" label="Departure Date" type="date" sx={{ width: 220 }} InputLabelProps={{ shrink: true }} />
@@ -69,7 +97,17 @@ function PostRide() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DatePicker views={['year']} id="year" name="year" label="Car Year" value={date} minDate={new Date('1950-01-01')} maxDate={new Date('2023-02-01')} onChange={(newValue) => setDate(newValue)} renderInput={(params) => <TextField {...params} helperText={null} />} />
+                <DatePicker
+                  views={['year']}
+                  id="year"
+                  name="year"
+                  label="Car Year"
+                  value={date}
+                  minDate={new Date('1950-01-01')}
+                  maxDate={new Date()}
+                  onChange={(newValue) => setDate(newValue)}
+                  renderInput={(params) => <TextField {...params} helperText={null} />}
+                />
               </LocalizationProvider>
             </Grid>
             <Grid item xs={12} sm={6}>
