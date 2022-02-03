@@ -30,35 +30,29 @@ function Login() {
     e.preventDefault();
     try {
       setLoading(true);
-      return login(email, password)
-        .then((userCredential) => {
-          navigate('/');
-        })
-        .catch((err) => {
-          switch (err.code) {
-            case 'auth/wrong-password':
-              setError('Incorrect password.');
-              break;
-            case 'auth/invalid-email':
-              setError(`Email address ${email} is invalid.`);
-              break;
-            case 'auth/user-not-found':
-              setError('User not found.');
-              break;
-            case 'auth/too-many-requests':
-              setError('Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.');
-              break;
-            default:
-              console.error(err.code, err.message);
-              setError(err.message);
-              break;
-          }
-        })
-        .then(() => {
+      await login(email, password);
+      setLoading(false);
+      navigate('/');
+    } catch (err) {
+      switch (err.code) {
+        case 'auth/wrong-password':
+          setError('Incorrect password.');
+          break;
+        case 'auth/invalid-email':
+          setError(`Email address ${email} is invalid.`);
+          break;
+        case 'auth/user-not-found':
+          setError('User not found.');
+          break;
+        case 'auth/too-many-requests':
+          setError('Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.');
+          break;
+        default:
+          console.error(err.code, err.message);
+          setError(err.message);
           setLoading(false);
-        });
-    } catch {
-      return setError('Failed to login');
+          break;
+      }
     }
   };
   return (
