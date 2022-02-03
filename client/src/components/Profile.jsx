@@ -19,6 +19,8 @@ function Profile() {
   const [open, setOpen] = useState(false);
   const [profile, setProfile] = useState({});
   const [reviews, setReviews] = useState([]);
+  const [driverRating, setDriverRating] = useState(0);
+  const [riderRating, setRiderRating] = useState(0);
 
   const { getProfile, currentUser, getReviews } = useContext(AuthContext);
   const handleOpen = () => setOpen(true);
@@ -27,10 +29,7 @@ function Profile() {
   const { id } = location.state;
 
   useEffect(() => {
-    // console.log(currentUser.uid);
-    // ! currentUser.uid , id
     const userId = id || currentUser.uid;
-
     getProfile(userId)
       .then((userProfile) => {
         setProfile(userProfile.data());
@@ -42,6 +41,25 @@ function Profile() {
     getReviews(id)
       .then((userReviews) => {
         setReviews(userReviews);
+        let driver = 0;
+        let driverCount = 0;
+        let rider = 0;
+        let riderCount = 0;
+        userReviews.forEach((review) => {
+          if (review.driver === 'on') {
+            driver += parseInt(review.starRating);
+            driverCount += 1;
+          } else {
+            rider += parseInt(review.starRating);
+            riderCount += 1;
+          }
+        });
+        let driverAverage = Math.round(((driver / driverCount) + Number.EPSILON) * 100) / 100;
+        let riderAverage = Math.round(((rider / riderCount) + Number.EPSILON) * 100) / 100;
+        if (isNaN(driverAverage)) driverAverage = 0;
+        if (isNaN(riderAverage)) riderAverage = 0;
+        setDriverRating(driverAverage);
+        setRiderRating(riderAverage);
       })
       .catch((err) => err);
   }, []);
@@ -51,7 +69,6 @@ function Profile() {
     navigate('/messages', { userId });
   };
   const profileImage = profile && profile.image ? profile.image.url : null;
-
   return (
     <Container component="main" maxWidth="auto">
       <CssBaseline />
@@ -96,17 +113,17 @@ function Profile() {
               <Typography component="legend">
                 Rider
                 {' '}
-                {profile.riderRating}
+                {riderRating}
               </Typography>
-              <Rating name="rider" value={parseInt(profile.riderRating)} readOnly precision={0.5} />
+              <Rating name="rider" value={riderRating} readOnly precision={0.5} />
             </Grid>
             <Grid item xs={6}>
               <Typography component="legend">
                 Driver
                 {' '}
-                {profile.driverRating}
+                {driverRating}
               </Typography>
-              <Rating name="driver" value={parseInt(profile.driverRating)} readOnly precision={0.5} />
+              <Rating name="driver" value={driverRating} readOnly precision={0.5} />
             </Grid>
           </Grid>
         </Box>

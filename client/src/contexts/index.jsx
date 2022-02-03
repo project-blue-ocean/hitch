@@ -100,7 +100,8 @@ export function AuthProvider({ children }) {
   }
 
   function getReviews(params) {
-    return getDocs(reviewsCollectionReference, params)
+    const q = query(collection(db, 'reviews'), where('receiverId', '==', params));
+    return getDocs(q)
       .then((reviewsSnapshot) => {
         const reviews = [];
         reviewsSnapshot.forEach((review) => {
