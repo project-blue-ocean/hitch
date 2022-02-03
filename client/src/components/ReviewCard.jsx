@@ -28,16 +28,17 @@ function stringToColor(string) {
 }
 
 export default function ReviewCard(review) {
-  const name = review.review.reviewerName;
-  const rating = review.review.startRating;
-  const reviewText = review.review.text;
-  const date = new Date(review.review.date);
+  const name = review.review.name;
+  const rating = parseInt(review.review.starRating);
+  const reviewText = review.review.message;
+  const date = new Date(review.review.date.toDate());
   const fullName = name.split(' ');
   const initials = fullName.shift().charAt(0) + fullName.pop().charAt(0);
   const dd = String(date.getDate()).padStart(2, '0');
   const mm = String(date.getMonth() + 1).padStart(2, '0');
   const yyyy = date.getFullYear();
   const fromatedDate = `${mm}-${dd}-${yyyy}`;
+
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardHeader

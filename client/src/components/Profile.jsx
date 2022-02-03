@@ -13,12 +13,13 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import { AuthContext } from '../contexts/index.jsx';
 import ReviewModal from './ReviewModal.jsx';
 import ReviewCard from './ReviewCard.jsx';
-import { reviews } from './profileDummy.js';
 
 function Profile() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [profile, setProfile] = useState({});
+  const [reviews, setReviews] = useState([]);
+
   const { getProfile, currentUser, getReviews } = useContext(AuthContext);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -40,7 +41,7 @@ function Profile() {
   useEffect(() => {
     getReviews(id)
       .then((userReviews) => {
-        // setReviews(userReviews);
+        setReviews(userReviews);
       })
       .catch((err) => err);
   }, []);
@@ -50,7 +51,6 @@ function Profile() {
     navigate('/messages', { userId });
   };
   const profileImage = profile && profile.image ? profile.image.url : null;
-
 
   return (
     <Container component="main" maxWidth="auto">
