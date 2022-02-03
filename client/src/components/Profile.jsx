@@ -73,7 +73,7 @@ function Profile() {
           </Typography>
         </Box>
         <Button variant="outlined" sx={{ flexGrow: 1, mt: 3 }}>
-          <Link to="/messages" state={{ profile }} style={{ textDecoration: 'none' }}>
+          <Link to="/messages" state={profile} style={{ textDecoration: 'none' }}>
             Message
           </Link>
         </Button>

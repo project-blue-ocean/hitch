@@ -31,7 +31,7 @@ function PostRide() {
       model: data.get('model'),
       year: date.getFullYear(),
       price: data.get('price'),
-      user: currentUser.user.uid,
+      driverId: currentUser.uid,
     };
     addRide(formToSend)
       .then((ride) => {

@@ -13,6 +13,7 @@ import {
   query,
   where,
   orderBy,
+  arrayUnion
 } from '@firebase/firestore';
 import {
   createUserWithEmailAndPassword,
@@ -69,9 +70,10 @@ export function AuthProvider({ children }) {
     return getDoc(profRef);
   }
 
-  function updateUser(body) {
-    const userDoc = doc(db, 'users', body.id);
-    return updateDoc(userDoc, body);
+  function updateUsersContacted(id, params) {
+    const {name, userId, image} = params;
+    const usersContactedDoc = doc(db, 'profile', id);
+    return updateDoc(usersContactedDoc, { usersContacted: arrayUnion(params)});
   }
 
   function getUser(params) {
@@ -150,7 +152,7 @@ export function AuthProvider({ children }) {
     uploadAvatar,
     addProfile,
     getUser,
-    updateUser,
+    updateUsersContacted,
     addRide,
     getRides,
     addReview,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
   Grid,
@@ -8,20 +8,63 @@ import {
   List,
   Fab,
 } from '@material-ui/core';
+import { useLocation } from 'react-router-dom';
 import Message from './Message.jsx';
 import UserContacted from './UserContacted.jsx';
 import { AuthContext } from '../contexts/index.jsx';
 import dummyData from '../../../messagesDummyData';
 
-function Messages({ userId }) {
-  const [usersContacted, setUsersContacted] = useState(dummyData.usersContacted);
+function Messages() {
+  const [usersContacted, setUsersContacted] = useState([]);
   const [messages, setMessages] = useState([]);
-  const [userContactedId, setUserContactedId] = useState('null');
-  const { currentUser, addMessage, getMessages } = useContext(AuthContext);
+  const [userContactedId, setUserContactedId] = useState(null);
+  const {
+    currentUser,
+    addMessage,
+    getMessages,
+    getProfile,
+    updateUsersContacted,
+  } = useContext(AuthContext);
+  const didMounted = useRef(false);
+  const location = useLocation();
+  const profile = location.state;
 
-  // const getUsersContacted = () => {
-  //   return false;
-  // };
+  useEffect(() => {
+    console.log('Calling', didMounted.current);
+    if (didMounted.current) {
+      if (profile) {
+        let userAlreadyContacted = false;
+        console.log("ContactedInner", usersContacted);
+        for (let i = 0; i < usersContacted.length; i += 1) {
+          if (usersContacted[i].userId === profile.userId) {
+            userAlreadyContacted = true;
+            break;
+          }
+        }
+        if (!userAlreadyContacted) {
+          console.log('called');
+          const newUser = { name: profile.name, userId: profile.userId, image: profile.image.url };
+          updateUsersContacted(currentUser.uid, newUser)
+            .then(result => {
+              setUsersContacted(usersContacted => [...usersContacted, newUser]);
+              console.log('Inserted');
+            })
+            .catch(err => console.log(err));
+        }
+      }
+    } else {
+      didMounted.current = true;
+      if (profile) {
+        setUserContactedId(profile.userId);
+      }
+      getProfile(currentUser.uid)
+        .then(result => {
+          let userProfile = result.data();
+          console.log('DidMount Profile', userProfile);
+          setUsersContacted(userProfile.usersContacted);
+        });
+    }
+  }, [usersContacted]);
 
   useEffect(() => {
     if (userContactedId !== null) {
@@ -44,14 +87,14 @@ function Messages({ userId }) {
       .catch((err) => console.log(err));
   };
 
-  const messagesEndRef = React.useRef();
+  const messagesEndRef = useRef();
 
   const scrollToBottom = () => {
     messagesEndRef.current.scrollIntoView();
   };
 
   useEffect(() => {
-    if (userContactedId !== null) {
+    if (userContactedId !== null && messages.length > 0) {
       scrollToBottom();
     }
   }, [userContactedId]);
@@ -59,6 +102,8 @@ function Messages({ userId }) {
   const userContactedOnClick = (id) => {
     setUserContactedId(id);
   };
+  console.log('Contacted', usersContacted);
+  console.log('UserContactedId', userContactedId);
 
   return (
     <div>
@@ -94,9 +139,5 @@ function Messages({ userId }) {
     </div>
   );
 }
-
-Messages.propTypes = {
-  userId: PropTypes.number.isRequired,
-};
 
 export default Messages;

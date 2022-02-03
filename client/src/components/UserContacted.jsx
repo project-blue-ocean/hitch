@@ -9,11 +9,11 @@ import {
 
 function UserContacted({ user, userContactedOnClick }) {
   return (
-    <ListItem button onClick={() => userContactedOnClick(user.id)}>
+    <ListItem button onClick={() => userContactedOnClick(user.userId)}>
       <ListItemIcon>
-        <Avatar alt={user.senderName} src="" />
+        <Avatar alt={user.senderName} src={user.image} />
       </ListItemIcon>
-      <ListItemText primary={user.senderName}>{user.senderName}</ListItemText>
+      <ListItemText primary={user.senderName}>{user.name}</ListItemText>
     </ListItem>
   );
 }
