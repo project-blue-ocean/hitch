@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
   Grid,
@@ -8,20 +8,69 @@ import {
   List,
   Fab,
 } from '@material-ui/core';
+import { useLocation } from 'react-router-dom';
 import Message from './Message.jsx';
 import UserContacted from './UserContacted.jsx';
 import { AuthContext } from '../contexts/index.jsx';
 import dummyData from '../../../messagesDummyData';
 
-function Messages({ userId }) {
-  const [usersContacted, setUsersContacted] = useState(dummyData.usersContacted);
+function Messages() {
+  const [usersContacted, setUsersContacted] = useState([]);
   const [messages, setMessages] = useState([]);
-  const [userContactedId, setUserContactedId] = useState('null');
-  const { currentUser, addMessage, getMessages } = useContext(AuthContext);
+  const [userContactedId, setUserContactedId] = useState(null);
+  const {
+    currentUser,
+    addMessage,
+    getMessages,
+    getProfile,
+    updateUsersContacted,
+  } = useContext(AuthContext);
+  const didMount = useRef(false);
+  const messagesEndRef = useRef();
+  const location = useLocation();
+  const profile = location.state;
 
-  // const getUsersContacted = () => {
-  //   return false;
-  // };
+  useEffect(() => {
+    if (didMount.current && profile) {
+      let userAlreadyContacted = false;
+      for (let i = 0; i < usersContacted.length; i += 1) {
+        if (usersContacted[i].userId === profile.userId) {
+          userAlreadyContacted = true;
+          break;
+        }
+      }
+      if (!userAlreadyContacted) {
+        const newContact = {
+          name: profile.name, userId: profile.userId, image: profile.image.url,
+        };
+        updateUsersContacted(currentUser.uid, newContact)
+          .then(() => {
+            const userContact = {
+              name: currentUser.displayName, userId: currentUser.uid, image: currentUser.photoURL,
+            };
+            updateUsersContacted(newContact.userId, userContact)
+              .then(() => {
+                setUsersContacted(usersContacted => [...usersContacted, newContact]);
+              });
+          })
+          .catch(err => console.log(err));
+      }
+    } else {
+      didMount.current = true;
+      if (profile) {
+        setUserContactedId(profile.userId);
+      }
+      getProfile(currentUser.uid)
+        .then(result => {
+          let { usersContacted } = result.data();
+          if (usersContacted === undefined) {
+            setUsersContacted([]);
+          } else {
+            setUsersContacted(usersContacted);
+          }
+        });
+    }
+  }, [usersContacted]);
 
   useEffect(() => {
     if (userContactedId !== null) {
@@ -44,14 +93,12 @@ function Messages({ userId }) {
       .catch((err) => console.log(err));
   };
 
-  const messagesEndRef = React.useRef();
-
   const scrollToBottom = () => {
     messagesEndRef.current.scrollIntoView();
   };
 
   useEffect(() => {
-    if (userContactedId !== null) {
+    if (userContactedId !== null && messages.length > 0) {
       scrollToBottom();
     }
   }, [userContactedId]);
@@ -66,7 +113,7 @@ function Messages({ userId }) {
         <Grid item xs={3} style={{ borderRight: '1px solid #e0e0e0' }}>
           <List>
             {usersContacted.map((user) => (
-              <UserContacted user={user} userContactedOnClick={userContactedOnClick} />
+              <UserContacted user={user} key={user.userId} userContactedOnClick={userContactedOnClick} />
             ))}
           </List>
         </Grid>
@@ -74,8 +121,8 @@ function Messages({ userId }) {
         && (
         <Grid item xs={9}>
           <List style={{ height: '70vh', overflowY: 'auto' }}>
-            {messages.map((message) => (
-              <Message message={message} userId={currentUser.uid} />
+            {messages.map((message, index) => (
+              <Message message={message} key={index} userId={currentUser.uid} />
             ))}
             <div ref={messagesEndRef} />
           </List>
@@ -84,7 +131,7 @@ function Messages({ userId }) {
             <Grid item xs={11}>
               <TextField id="message" name="message" autoComplete="off" required fullWidth />
             </Grid>
-            <Grid xs={1} align="right">
+            <Grid item xs={1} align="right">
               <Fab type="submit" color="primary" aria-label="add">Send</Fab>
             </Grid>
           </Grid>
@@ -94,9 +141,5 @@ function Messages({ userId }) {
     </div>
   );
 }
-
-Messages.propTypes = {
-  userId: PropTypes.number.isRequired,
-};
 
 export default Messages;
