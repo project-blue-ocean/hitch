@@ -73,8 +73,8 @@ function Main() {
     }
   };
 
-  const searchRides = async (from) => {
-    const data = await getRides(from);
+  const searchRides = async (from, destination) => {
+    const data = await getRides(from, destination);
     setRides(data);
     if (data.length > 0) setShowRides(true);
   };
