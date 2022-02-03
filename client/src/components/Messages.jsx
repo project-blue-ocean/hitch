@@ -25,39 +25,38 @@ function Messages() {
     getProfile,
     updateUsersContacted,
   } = useContext(AuthContext);
-  const didMounted = useRef(false);
+  const didMount = useRef(false);
+  const messagesEndRef = useRef();
   const location = useLocation();
   const profile = location.state;
 
   useEffect(() => {
-    if (didMounted.current) {
-      if (profile) {
-        let userAlreadyContacted = false;
-        for (let i = 0; i < usersContacted.length; i += 1) {
-          if (usersContacted[i].userId === profile.userId) {
-            userAlreadyContacted = true;
-            break;
-          }
-        }
-        if (!userAlreadyContacted) {
-          const newContact = {
-            name: profile.name, userId: profile.userId, image: profile.image.url,
-          };
-          updateUsersContacted(currentUser.uid, newContact)
-            .then(() => {
-              const userContact = {
-                name: currentUser.displayName, userId: currentUser.uid, image: currentUser.photoURL,
-              };
-              updateUsersContacted(newContact.userId, userContact)
-                .then(() => {
-                  setUsersContacted(usersContacted => [...usersContacted, newContact]);
-                });
-            })
-            .catch(err => console.log(err));
+    if (didMount.current && profile) {
+      let userAlreadyContacted = false;
+      for (let i = 0; i < usersContacted.length; i += 1) {
+        if (usersContacted[i].userId === profile.userId) {
+          userAlreadyContacted = true;
+          break;
         }
       }
+      if (!userAlreadyContacted) {
+        const newContact = {
+          name: profile.name, userId: profile.userId, image: profile.image.url,
+        };
+        updateUsersContacted(currentUser.uid, newContact)
+          .then(() => {
+            const userContact = {
+              name: currentUser.displayName, userId: currentUser.uid, image: currentUser.photoURL,
+            };
+            updateUsersContacted(newContact.userId, userContact)
+              .then(() => {
+                setUsersContacted(usersContacted => [...usersContacted, newContact]);
+              });
+          })
+          .catch(err => console.log(err));
+      }
     } else {
-      didMounted.current = true;
+      didMount.current = true;
       if (profile) {
         setUserContactedId(profile.userId);
       }
@@ -93,8 +92,6 @@ function Messages() {
     addMessage(messageToSend)
       .catch((err) => console.log(err));
   };
-
-  const messagesEndRef = useRef();
 
   const scrollToBottom = () => {
     messagesEndRef.current.scrollIntoView();

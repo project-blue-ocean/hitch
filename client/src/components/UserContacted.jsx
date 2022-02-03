@@ -8,10 +8,11 @@ import {
 } from '@material-ui/core';
 
 function UserContacted({ user, userContactedOnClick }) {
+  const imageToRender = user.image ? user.image : '';
   return (
     <ListItem button onClick={() => userContactedOnClick(user.userId)}>
       <ListItemIcon>
-        <Avatar alt={user.senderName} src={user.image} />
+        <Avatar alt={user.senderName} src={imageToRender} />
       </ListItemIcon>
       <ListItemText primary={user.senderName}>{user.name}</ListItemText>
     </ListItem>
