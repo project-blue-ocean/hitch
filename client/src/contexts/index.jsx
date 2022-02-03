@@ -21,7 +21,7 @@ import {
   onAuthStateChanged,
   updateProfile as updateprofile,
 } from 'firebase/auth';
-
+import _ from 'lodash';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { auth, db, storage } from '../firebase';
 
@@ -84,16 +84,13 @@ export function AuthProvider({ children }) {
     return addDoc(ridesCollectionReference, body);
   }
 
-  function getRides(params) {
-    const q = query(ridesCollectionReference, where('start', '==', params));
-    return getDocs(q)
-      .then((querySnapshot) => {
-        const rides = [];
-        querySnapshot.forEach((ride) => {
-          rides.push(ride.data());
-        });
-        return rides;
-      });
+  function getRides(start, destination) {
+    const startQuery = query(ridesCollectionReference, where('start', '==', start));
+    return getDocs(startQuery)
+      .then((startQuerySnapshot) => startQuerySnapshot
+        .map((ride) => ride.date())
+        .filter((ride) => !destination || ride.destination === destination));
+    // TODO: make start location optional
   }
 
   // Reviews
