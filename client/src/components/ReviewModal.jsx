@@ -38,7 +38,6 @@ export default function ReviewModal({ handleClose, open, prof }) {
     const lastName = data.get('lastName');
     const driverStatus = data.get('wasDriver');
     const rideDate = new Date();
-
     const review = {
       starRating: rating,
       driver: driverStatus,
