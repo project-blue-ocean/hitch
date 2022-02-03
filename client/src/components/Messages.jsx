@@ -43,11 +43,19 @@ function Messages() {
         }
         if (!userAlreadyContacted) {
           console.log('called');
-          const newUser = { name: profile.name, userId: profile.userId, image: profile.image.url };
-          updateUsersContacted(currentUser.uid, newUser)
-            .then(result => {
-              setUsersContacted(usersContacted => [...usersContacted, newUser]);
-              console.log('Inserted');
+          const newContact = {
+            name: profile.name, userId: profile.userId, image: profile.image.url,
+          };
+          updateUsersContacted(currentUser.uid, newContact)
+            .then(() => {
+              const userContact = {
+                name: currentUser.displayName, userId: currentUser.uid, image: currentUser.photoURL,
+              };
+              updateUsersContacted(newContact.userId, userContact)
+                .then(() => {
+                  setUsersContacted(usersContacted => [...usersContacted, newContact]);
+                  console.log('Inserted');
+                });
             })
             .catch(err => console.log(err));
         }
@@ -59,9 +67,13 @@ function Messages() {
       }
       getProfile(currentUser.uid)
         .then(result => {
-          let userProfile = result.data();
-          console.log('DidMount Profile', userProfile);
-          setUsersContacted(userProfile.usersContacted);
+          let { usersContacted } = result.data();
+          console.log('DidMount Profile', usersContacted);
+          if (usersContacted === undefined) {
+            setUsersContacted([]);
+          } else {
+            setUsersContacted(usersContacted);
+          }
         });
     }
   }, [usersContacted]);
