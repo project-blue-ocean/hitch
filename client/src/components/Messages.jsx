@@ -30,11 +30,9 @@ function Messages() {
   const profile = location.state;
 
   useEffect(() => {
-    console.log('Calling', didMounted.current);
     if (didMounted.current) {
       if (profile) {
         let userAlreadyContacted = false;
-        console.log("ContactedInner", usersContacted);
         for (let i = 0; i < usersContacted.length; i += 1) {
           if (usersContacted[i].userId === profile.userId) {
             userAlreadyContacted = true;
@@ -42,7 +40,6 @@ function Messages() {
           }
         }
         if (!userAlreadyContacted) {
-          console.log('called');
           const newContact = {
             name: profile.name, userId: profile.userId, image: profile.image.url,
           };
@@ -54,7 +51,6 @@ function Messages() {
               updateUsersContacted(newContact.userId, userContact)
                 .then(() => {
                   setUsersContacted(usersContacted => [...usersContacted, newContact]);
-                  console.log('Inserted');
                 });
             })
             .catch(err => console.log(err));
@@ -68,7 +64,6 @@ function Messages() {
       getProfile(currentUser.uid)
         .then(result => {
           let { usersContacted } = result.data();
-          console.log('DidMount Profile', usersContacted);
           if (usersContacted === undefined) {
             setUsersContacted([]);
           } else {
@@ -114,8 +109,6 @@ function Messages() {
   const userContactedOnClick = (id) => {
     setUserContactedId(id);
   };
-  console.log('Contacted', usersContacted);
-  console.log('UserContactedId', userContactedId);
 
   return (
     <div>
@@ -123,7 +116,7 @@ function Messages() {
         <Grid item xs={3} style={{ borderRight: '1px solid #e0e0e0' }}>
           <List>
             {usersContacted.map((user) => (
-              <UserContacted user={user} userContactedOnClick={userContactedOnClick} />
+              <UserContacted user={user} key={user.userId} userContactedOnClick={userContactedOnClick} />
             ))}
           </List>
         </Grid>
@@ -131,8 +124,8 @@ function Messages() {
         && (
         <Grid item xs={9}>
           <List style={{ height: '70vh', overflowY: 'auto' }}>
-            {messages.map((message) => (
-              <Message message={message} userId={currentUser.uid} />
+            {messages.map((message, index) => (
+              <Message message={message} key={index} userId={currentUser.uid} />
             ))}
             <div ref={messagesEndRef} />
           </List>
@@ -141,7 +134,7 @@ function Messages() {
             <Grid item xs={11}>
               <TextField id="message" name="message" autoComplete="off" required fullWidth />
             </Grid>
-            <Grid xs={1} align="right">
+            <Grid item xs={1} align="right">
               <Fab type="submit" color="primary" aria-label="add">Send</Fab>
             </Grid>
           </Grid>

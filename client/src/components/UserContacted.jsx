@@ -19,9 +19,9 @@ function UserContacted({ user, userContactedOnClick }) {
 }
 
 UserContacted.propTypes = {
-  user: PropTypes.number.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  userContactedOnClick: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  userContactedOnClick: PropTypes.func.isRequired,
 };
 
 export default UserContacted;
