@@ -93,7 +93,7 @@ export function AuthProvider({ children }) {
         .docs
         .map((ride) => ride.data())
         .filter((ride) => !destination || ride.destination === destination));
-        // TODO: handle queries w/ no start param
+    // TODO: handle queries w/ no start param
   }
 
   // Reviews
@@ -102,7 +102,8 @@ export function AuthProvider({ children }) {
   }
 
   function getReviews(params) {
-    return getDocs(reviewsCollectionReference, params)
+    const q = query(collection(db, 'reviews'), where('receiverId', '==', params));
+    return getDocs(q)
       .then((reviewsSnapshot) => {
         const reviews = [];
         reviewsSnapshot.forEach((review) => {

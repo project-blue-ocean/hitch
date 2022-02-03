@@ -47,6 +47,7 @@ export default function ReviewModal({ handleClose, open, prof }) {
       receiverId: userId,
       name: `${firstName} ${lastName}`,
     };
+
     addReview(review);
     handleClose();
   };

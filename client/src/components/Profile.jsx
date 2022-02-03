@@ -36,10 +36,7 @@ function Profile() {
         setProfile(userProfile.data());
       })
       .catch((err) => err);
-  }, []);
-
-  useEffect(() => {
-    getReviews(id)
+    getReviews(userId)
       .then((userReviews) => {
         setReviews(userReviews);
       })
