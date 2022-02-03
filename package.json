@@ -29,6 +29,7 @@
     "firebase": "^9.6.5",
     "firebase-admin": "^10.0.2",
     "html-webpack-plugin": "^5.5.0",
+    "lodash": "^4.17.21",
     "luxon": "^1.28.0",
     "mapbox-gl": "^2.7.0",
     "moment": "^2.29.1",
