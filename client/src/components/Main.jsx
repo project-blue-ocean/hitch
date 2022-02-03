@@ -330,7 +330,7 @@ function Main() {
                   Go to Profile
                 </Button>
               </Link>
-              <Link to="/messages" state={{ id: profile.userId }} style={{ textDecoration: 'none' }}>
+              <Link to="/messages" state={profile} style={{ textDecoration: 'none' }}>
                 <Button
                   sx={{ width: '150px' }}
                   variant="contained"
