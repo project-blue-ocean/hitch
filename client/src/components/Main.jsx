@@ -17,7 +17,7 @@ import Rating from '@mui/material/Rating';
 import Autocomplete from '@mui/material/Autocomplete';
 import axios from 'axios';
 import Map from './Map.jsx';
-import van from '../assets/van1.png';
+import van from '../assets/Van.webp';
 import { AuthContext } from '../contexts/index.jsx';
 import UScityNames from '../assets/cities.js';
 

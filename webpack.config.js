@@ -31,13 +31,17 @@ module.exports = {
         use: ['style-loader', 'css-loader'],
       },
       {
-        test: /\.(png|jpe?g|gif)$/i,
-        use: {
+        test: /\.(png|jpe?g|gif|webp)$/i,
+        use: [{
           loader: 'file-loader',
           options: {
             name: '[path][name].[ext]',
           },
         },
+        {
+          loader: 'webp-loader',
+        },
+        ],
       },
     ],
   },

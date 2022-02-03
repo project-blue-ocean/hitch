@@ -6,8 +6,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import CssBaseline from '@mui/material/CssBaseline';
 import { AuthContext } from '../contexts/index.jsx';
-import logo from '../assets/logo.png';
-import bg from '../assets/menu1.jpeg';
+import logo from '../assets/logo.webp';
+import bg from '../assets/menu1.webp';
 
 function MenuOption() {
   const [anchorEl, setAnchorEl] = React.useState(null);
