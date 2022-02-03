@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
@@ -46,10 +46,6 @@ function Profile() {
       .catch((err) => err);
   }, []);
 
-  const handleMessage = () => {
-    const { userId } = profile;
-    navigate('/messages', { userId });
-  };
   const profileImage = profile && profile.image ? profile.image.url : null;
 
   return (
@@ -85,7 +81,11 @@ function Profile() {
             {profile.bio}
           </Typography>
         </Box>
-        <Button variant="outlined" onClick={handleMessage} sx={{ flexGrow: 1, mt: 3 }}>Message</Button>
+        <Button variant="outlined" sx={{ flexGrow: 1, mt: 3 }}>
+          <Link to="/messages" state={profile} style={{ textDecoration: 'none' }}>
+            Message
+          </Link>
+        </Button>
         <Button variant="outlined" onClick={handleOpen} sx={{ flexGrow: 1, mt: 1 }}>
           Write a Review
         </Button>

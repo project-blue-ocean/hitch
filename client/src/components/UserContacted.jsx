@@ -8,20 +8,21 @@ import {
 } from '@material-ui/core';
 
 function UserContacted({ user, userContactedOnClick }) {
+  const imageToRender = user.image ? user.image : '';
   return (
-    <ListItem button onClick={() => userContactedOnClick(user.id)}>
+    <ListItem button onClick={() => userContactedOnClick(user.userId)}>
       <ListItemIcon>
-        <Avatar alt={user.senderName} src="" />
+        <Avatar alt={user.senderName} src={imageToRender} />
       </ListItemIcon>
-      <ListItemText primary={user.senderName}>{user.senderName}</ListItemText>
+      <ListItemText primary={user.senderName}>{user.name}</ListItemText>
     </ListItem>
   );
 }
 
 UserContacted.propTypes = {
-  user: PropTypes.number.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  userContactedOnClick: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  userContactedOnClick: PropTypes.func.isRequired,
 };
 
 export default UserContacted;

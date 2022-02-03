@@ -26,7 +26,7 @@ function Message({ message, userId }) {
 }
 
 Message.propTypes = {
-  userId: PropTypes.number.isRequired,
+  userId: PropTypes.string.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   message: PropTypes.object.isRequired,
 };
