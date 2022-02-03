@@ -85,12 +85,13 @@ export function AuthProvider({ children }) {
   }
 
   function getRides(start, destination) {
-    const startQuery = query(ridesCollectionReference, where('start', '==', start));
-    return getDocs(startQuery)
-      .then((startQuerySnapshot) => startQuerySnapshot
-        .map((ride) => ride.date())
+    const q = query(ridesCollectionReference, where('start', '==', start));
+    return getDocs(q)
+      .then((querySnapshot) => querySnapshot
+        .docs
+        .map((ride) => ride.data())
         .filter((ride) => !destination || ride.destination === destination));
-    // TODO: make start location optional
+        // TODO: handle queries w/ no start param
   }
 
   // Reviews
