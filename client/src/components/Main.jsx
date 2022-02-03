@@ -139,8 +139,7 @@ function Main() {
   };
 
   const styles = {
-    width: '50%',
-    minWidth: '50vw',
+    width: '222px',
     margin: 'auto',
     paddingTop: '50px',
   };
@@ -269,14 +268,19 @@ function Main() {
             <Box
               component="form"
               sx={{
-                '& > :not(style)': { m: 1, width: '25ch' },
+                '& > :not(style)': { m: 1 },
               }}
               noValidate
               autoComplete="off"
               onSubmit={submitForm}
             >
               <Autocomplete
-                sx={{ background: 'white', opacity: '.9', borderRadius: '6px' }}
+                sx={{
+                  background: 'white',
+                  opacity: '.9',
+                  borderRadius: '6px',
+                  width: '100%',
+                }}
                 id="filled-basic"
                 variant="filled"
                 type="text"
@@ -286,7 +290,12 @@ function Main() {
                 renderInput={(params) => <TextField {...params} name="From" label="From" />}
               />
               <Autocomplete
-                sx={{ background: 'white', opacity: '.9', borderRadius: '6px' }}
+                sx={{
+                  background: 'white',
+                  opacity: '.9',
+                  borderRadius: '6px',
+                  width: '100%',
+                }}
                 id="filled-basic"
                 variant="filled"
                 type="text"
@@ -295,7 +304,7 @@ function Main() {
                 options={UScityNames}
                 renderInput={(params) => <TextField {...params} name="Destination" label="Destination" />}
               />
-              <Button variant="contained" type="submit">
+              <Button variant="contained" type="submit" sx={{ width: '100%' }}>
                 {' '}
                 Go!
                 {' '}
@@ -330,7 +339,7 @@ function Main() {
                   Go to Profile
                 </Button>
               </Link>
-              <Link to="/messages" state={{ id: profile.userId }} style={{ textDecoration: 'none' }}>
+              <Link to="/messages" state={profile} style={{ textDecoration: 'none' }}>
                 <Button
                   sx={{ width: '150px' }}
                   variant="contained"
