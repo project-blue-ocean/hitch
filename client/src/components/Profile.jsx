@@ -13,13 +13,14 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import { AuthContext } from '../contexts/index.jsx';
 import ReviewModal from './ReviewModal.jsx';
 import ReviewCard from './ReviewCard.jsx';
-import { reviews } from './profileDummy.js';
 
 function Profile() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [profile, setProfile] = useState({});
-  const { getProfile, currentUser } = useContext(AuthContext);
+  const [reviews, setReviews] = useState([]);
+
+  const { getProfile, currentUser, getReviews } = useContext(AuthContext);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const location = useLocation();
@@ -33,6 +34,14 @@ function Profile() {
     getProfile(userId)
       .then((userProfile) => {
         setProfile(userProfile.data());
+      })
+      .catch((err) => err);
+  }, []);
+
+  useEffect(() => {
+    getReviews(id)
+      .then((userReviews) => {
+        setReviews(userReviews);
       })
       .catch((err) => err);
   }, []);
@@ -80,7 +89,7 @@ function Profile() {
         <Button variant="outlined" onClick={handleOpen} sx={{ flexGrow: 1, mt: 1 }}>
           Write a Review
         </Button>
-        <ReviewModal handleClose={handleClose} open={open} profile={profile} />
+        <ReviewModal handleClose={handleClose} open={open} prof={profile} />
         <Box sx={{ flexGrow: 1, mt: 2 }}>
           <Grid container spacing={2}>
             <Grid item xs={6}>

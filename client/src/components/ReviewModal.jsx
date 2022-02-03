@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -8,6 +8,7 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Modal from '@mui/material/Modal';
+import Grid from '@mui/material/Grid';
 
 import { AuthContext } from '../contexts/index.jsx';
 
@@ -23,33 +24,28 @@ const style = {
   p: 4,
 };
 
-export default function ReviewModal({ handleClose, open, profile }) {
-  const { addReview, getReviews } = useContext(AuthContext);
-
+export default function ReviewModal({ handleClose, open, prof }) {
+  const { addReview } = useContext(AuthContext);
   const [value, setValue] = useState(0);
-
-  useEffect(() => {
-    getReviews('wTNTNk9WndF91iuHDyym')
-      .then((userReviews) => {
-        //userReviews = array of review objects
-      })
-      .catch((err) => err);
-  }, []);
+  const { userId } = prof;
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const feedback = data.get('feedback');
     const rating = data.get('half-rating');
-    const rider = data.get('wasRider');
+    const firstName = data.get('firstName');
+    const lastName = data.get('lastName');
     const driverStatus = data.get('wasDriver');
     const rideDate = new Date();
+
     const review = {
-      reviewerId: '33',
       starRating: rating,
       driver: driverStatus,
       date: rideDate,
       message: feedback,
+      receiverId: userId,
+      name: `${firstName} ${lastName}`,
     };
     addReview(review);
     handleClose();
@@ -65,7 +61,7 @@ export default function ReviewModal({ handleClose, open, profile }) {
         <Typography id="modal-modal-title" variant="h6" component="h2">
           Your review of
           {' '}
-          {profile.name}
+          {prof.name}
         </Typography>
         <Box
           component="form"
@@ -75,11 +71,32 @@ export default function ReviewModal({ handleClose, open, profile }) {
           autoComplete="off"
           onSubmit={handleSubmit}
         >
+          <Grid item xs={12} sm={6}>
+            <TextField
+              autoComplete="given-name"
+              name="firstName"
+              required
+              fullWidth
+              id="firstName"
+              label="First Name"
+              autoFocus
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              required
+              fullWidth
+              id="lastName"
+              label="Last Name"
+              name="lastName"
+              autoComplete="family-name"
+            />
+          </Grid>
           <div>
             {' '}
             Was
             {' '}
-            {profile.name}
+            {prof.name}
             {' '}
             the rider or the driver?
           </div>
@@ -119,3 +136,4 @@ export default function ReviewModal({ handleClose, open, profile }) {
     </Modal>
   );
 };
+
