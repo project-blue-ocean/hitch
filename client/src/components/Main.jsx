@@ -46,29 +46,29 @@ function Main() {
     if (from !== '' && destination === '') {
       const sourceResponse = await axios.get('/coords', { params: { location: from } });
       await setStart({
-        longitude: sourceResponse.data.features[0].bbox[0],
-        latitude: sourceResponse.data.features[0].bbox[1],
+        longitude: sourceResponse.data.features[0].bbox[0] + 0.2,
+        latitude: sourceResponse.data.features[0].bbox[1] + 0.2,
       });
       setEnd({ longitude: 0, latitude: 0 });
     }
     if (destination !== '' && from === '') {
       const endResponse = await axios.get('/coords', { params: { location: destination } });
       await setEnd({
-        longitude: endResponse.data.features[0].bbox[0],
-        latitude: endResponse.data.features[0].bbox[1],
+        longitude: endResponse.data.features[0].bbox[0] + 0.2,
+        latitude: endResponse.data.features[0].bbox[1] + 0.2,
       });
       setStart({ longitude: 0, latitude: 0 });
     }
     if (destination !== '' && from !== '') {
       const sourceResponse = await axios.get('/coords', { params: { location: from } });
       await setStart({
-        longitude: sourceResponse.data.features[0].bbox[0],
-        latitude: sourceResponse.data.features[0].bbox[1],
+        longitude: sourceResponse.data.features[0].bbox[0] + 0.2,
+        latitude: sourceResponse.data.features[0].bbox[1] + 0.2,
       });
       const endResponse = await axios.get('/coords', { params: { location: destination } });
       await setEnd({
-        longitude: endResponse.data.features[0].bbox[0],
-        latitude: endResponse.data.features[0].bbox[1],
+        longitude: endResponse.data.features[0].bbox[0] + 0.2,
+        latitude: endResponse.data.features[0].bbox[1] + 0.2,
       });
     }
   };
