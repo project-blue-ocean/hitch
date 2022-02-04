@@ -88,8 +88,9 @@ export default function Map({ location, startCoords, endCoords }) {
       <Box
         ref={mapContainer}
         style={{
-          width: 'auto',
-          height: '400px',
+          width: '60vw',
+          height: '30vh',
+          maxHeight: '50vh',
         }}
         className="map-container"
       />

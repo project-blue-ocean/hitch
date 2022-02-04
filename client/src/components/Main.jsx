@@ -139,7 +139,8 @@ function Main() {
   };
 
   const styles = {
-    width: '222px',
+    width: '50vw',
+    maxWidth: '250px',
     margin: 'auto',
     paddingTop: '50px',
   };
@@ -161,7 +162,7 @@ function Main() {
         style={{
           margin: 'auto',
           width: '50%',
-          textAlign: 'center',
+          justifyContent: 'center',
         }}
       >
         {showMap ? (
@@ -173,12 +174,12 @@ function Main() {
             <div
               style={{
                 width: '70vw',
-                height: '50vw',
+                height: '300px',
                 maxWidth: '400px',
                 maxHeight: '300px',
               }}
             >
-              <h1>Hitch</h1>
+              <div />
             </div>
           )}
 
