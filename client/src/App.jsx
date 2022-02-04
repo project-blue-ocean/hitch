@@ -16,21 +16,18 @@ import Toast from './components/Toast.jsx';
 import { AuthProvider } from './contexts/index.jsx';
 
 function App() {
-
   return (
     <Router>
       <AuthProvider>
         <MenuOption />
         <Toast />
         <Routes>
-          {/* TODO: Wrap private pages in <PrivateRoute></PrivateRoute> */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/" exact element={<Main />} />
-          <Route path="/my-profile" element={<Profile />} />
-          <Route path="/messages" element={<Messages userId={84} />} />
-          <Route path="/post-ride" element={<PostRide />} />
-
+          <Route path="/" exact element={<PrivateRoute><Main /></PrivateRoute>} />
+          <Route path="/my-profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+          <Route path="/messages" element={<PrivateRoute><Messages userId={84} /></PrivateRoute>} />
+          <Route path="/post-ride" element={<PrivateRoute><PostRide /></PrivateRoute>} />
         </Routes>
       </AuthProvider>
     </Router>
