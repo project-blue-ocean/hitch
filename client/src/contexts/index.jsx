@@ -13,7 +13,7 @@ import {
   query,
   where,
   orderBy,
-  arrayUnion
+  arrayUnion,
 } from '@firebase/firestore';
 import {
   createUserWithEmailAndPassword,
@@ -119,7 +119,7 @@ export function AuthProvider({ children }) {
 
   function getMessages(params, callback) {
     const q = query(collection(db, 'messages'), orderBy('time'), where('chatd', 'array-contains', params));
-    onSnapshot(q, (querySnapshot) => {
+    return onSnapshot(q, (querySnapshot) => {
       const messages = [];
       querySnapshot.forEach((docs) => {
         messages.push(docs.data());

@@ -1,5 +1,9 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
-import PropTypes from 'prop-types';
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useRef,
+} from 'react';
 import {
   Grid,
   Paper,
@@ -12,7 +16,6 @@ import { useLocation } from 'react-router-dom';
 import Message from './Message.jsx';
 import UserContacted from './UserContacted.jsx';
 import { AuthContext } from '../contexts/index.jsx';
-import dummyData from '../../../messagesDummyData';
 
 function Messages() {
   const [usersContacted, setUsersContacted] = useState([]);
@@ -26,12 +29,13 @@ function Messages() {
     updateUsersContacted,
   } = useContext(AuthContext);
   const didMount = useRef(false);
+  const AddedprofileToUsersContacted = useRef(false);
   const messagesEndRef = useRef();
   const location = useLocation();
   const profile = location.state;
 
   useEffect(() => {
-    if (didMount.current && profile) {
+    if (didMount.current && !AddedprofileToUsersContacted.current && profile) {
       let userAlreadyContacted = false;
       for (let i = 0; i < usersContacted.length; i += 1) {
         if (usersContacted[i].userId === profile.userId) {
@@ -50,19 +54,24 @@ function Messages() {
             };
             updateUsersContacted(newContact.userId, userContact)
               .then(() => {
+                AddedprofileToUsersContacted.current = true;
                 setUsersContacted(usersContacted => [...usersContacted, newContact]);
               });
           })
-          .catch(err => console.log(err));
+          .catch((err) => console.log(err));
       }
-    } else {
+    }
+  }, [usersContacted]);
+
+  useEffect(() => {
+    if (!didMount.current) {
       didMount.current = true;
       if (profile) {
         setUserContactedId(profile.userId);
       }
       getProfile(currentUser.uid)
-        .then(result => {
-          let { usersContacted } = result.data();
+        .then((result) => {
+          const { usersContacted } = result.data();
           if (usersContacted === undefined) {
             setUsersContacted([]);
           } else {
@@ -70,13 +79,16 @@ function Messages() {
           }
         });
     }
-  }, [usersContacted]);
+  }, []);
 
   useEffect(() => {
     if (userContactedId !== null) {
-      getMessages(userContactedId + currentUser.uid, (updatedMessages) => {
+      const unsubscribe = getMessages(userContactedId + currentUser.uid, (updatedMessages) => {
         setMessages(updatedMessages);
       });
+      return () => {
+        unsubscribe();
+      };
     }
   }, [userContactedId]);
 
@@ -90,6 +102,7 @@ function Messages() {
       time: new Date(),
     };
     addMessage(messageToSend)
+      // eslint-disable-next-line no-console
       .catch((err) => console.log(err));
   };
 
@@ -113,7 +126,11 @@ function Messages() {
         <Grid item xs={3} style={{ borderRight: '1px solid #e0e0e0' }}>
           <List>
             {usersContacted.map((user) => (
-              <UserContacted user={user} key={user.userId} userContactedOnClick={userContactedOnClick} />
+              <UserContacted
+                user={user}
+                key={user.userId}
+                userContactedOnClick={userContactedOnClick}
+              />
             ))}
           </List>
         </Grid>
@@ -122,7 +139,7 @@ function Messages() {
         <Grid item xs={9}>
           <List style={{ height: '70vh', overflowY: 'auto' }}>
             {messages.map((message, index) => (
-              <Message message={message} key={index} userId={currentUser.uid} />
+              <Message message={message} key={index.toString()} userId={currentUser.uid} />
             ))}
             <div ref={messagesEndRef} />
           </List>
