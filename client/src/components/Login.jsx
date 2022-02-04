@@ -18,7 +18,9 @@ function Login() {
   const [error, setError] = useState('');
   const [isLoading, setLoading] = useState(false);
   // Context
-  const { login } = useContext(AuthContext);
+  const {
+    login, setToastShowing, setToastMessage, setToastType,
+  } = useContext(AuthContext);
   // Methods
   const onChange = (e) => {
     const { id, value } = e.target;
@@ -34,6 +36,9 @@ function Login() {
       setLoading(false);
       navigate('/');
     } catch (err) {
+      setToastType('error');
+      setToastMessage(err.message);
+      setToastShowing(true);
       switch (err.code) {
         case 'auth/wrong-password':
           setError('Incorrect password.');
