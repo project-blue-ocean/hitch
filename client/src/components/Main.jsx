@@ -28,6 +28,7 @@ function Main() {
   const [rides, setRides] = useState([]);
   const [showRides, setShowRides] = useState(false);
   const [showMap, setMap] = useState(false);
+  const [currentCar, setCurrentCar] = useState({ brand: '', model: '', year: '' });
   const [profilepic, setprofilepic] = useState('');
   const [location, setLocation] = useState({
     longitude: 0,
@@ -97,7 +98,8 @@ function Main() {
       .catch((err) => err);
   };
 
-  const displayModal = async (id) => {
+  const displayModal = async (id, brand, model, year) => {
+    setCurrentCar({ brand, model, year });
     await getUserProfile(id);
     setShowDetails(true);
   };
@@ -139,7 +141,8 @@ function Main() {
   };
 
   const styles = {
-    width: '222px',
+    width: '50vw',
+    maxWidth: '250px',
     margin: 'auto',
     paddingTop: '50px',
   };
@@ -161,7 +164,7 @@ function Main() {
         style={{
           margin: 'auto',
           width: '50%',
-          textAlign: 'center',
+          justifyContent: 'center',
         }}
       >
         {showMap ? (
@@ -173,12 +176,12 @@ function Main() {
             <div
               style={{
                 width: '70vw',
-                height: '50vw',
+                height: '300px',
                 maxWidth: '400px',
                 maxHeight: '300px',
               }}
             >
-              <h1>Hitch</h1>
+              <div />
             </div>
           )}
 
@@ -212,7 +215,7 @@ function Main() {
                         <IconButton
                           type="submit"
                           onClick={() => {
-                            displayModal(ride.driverId);
+                            displayModal(ride.driverId, ride.brand, ride.model, ride.year);
                           }}
                         >
                           <DetailsIcon />
@@ -324,11 +327,23 @@ function Main() {
             </Typography>
             <Avatar alt="userpic" src={profilepic} />
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              {' '}
+
+              <br />
               Driver:
-              {profile.name}
-              {' '}
-              <Rating name="rating" value={Number(profile.driverRating)} readOnly precision={0.5} />
+              <br />
+              <p style={{ margin: '0', fontSize: '2em' }}>
+                {profile.name}
+              </p>
+              <br />
+              Car:
+              <br />
+              <p style={{ margin: '0', fontSize: '2em' }}>
+                {currentCar.brand}
+                {' '}
+                {currentCar.model}
+                <br />
+                {currentCar.year}
+              </p>
             </Typography>
             <Typography>
               <Link to="/my-profile" state={{ id: profile.userId }} style={{ textDecoration: 'none' }}>
