@@ -17,9 +17,13 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import Autocomplete from '@mui/material/Autocomplete';
 import { AuthContext } from '../contexts/index.jsx';
 import UScityNames from '../assets/cities.js';
+import carData from '../assets/carData.js';
 
 function PostRide() {
   const [date, setDate] = useState(new Date());
+  const [carMake, setCarMake] = useState('');
+  const [carModel, setCarModel] = useState('');
+
   const navigate = useNavigate();
   const { currentUser, addRide } = useContext(AuthContext);
   const handleFormOnSubmit = (event) => {
@@ -78,7 +82,6 @@ function PostRide() {
                 required
                 fullWidth
                 id="destination"
-                label="Destination City, State"
                 autoComplete
                 autoFocus
                 disablePortal
@@ -90,10 +93,44 @@ function PostRide() {
               <TextField required id="date" name="date" label="Departure Date" type="date" sx={{ width: 220 }} InputLabelProps={{ shrink: true }} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField required fullWidth id="brand" label="Car Brand" name="brand" autoComplete="car-brand" />
+              <Autocomplete
+                sx={{ background: 'white', opacity: '.9', borderRadius: '6px' }}
+                variant="filled"
+                type="text"
+                required
+                fullWidth
+                id="brand"
+                autoComplete
+                onChange={(e) => {
+                  const selectedMake = e.target.innerText;
+                  setCarModel('');
+                  setCarMake(selectedMake);
+                  console.log('trigggered')
+                }}
+                disablePortal
+                options={Object.keys(carData)}
+                renderInput={(params) => <TextField {...params} name="brand" label="Make" />}
+              />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField required fullWidth id="model" label="Car Model" name="model" autoComplete="car-model" />
+              <Autocomplete
+                sx={{ background: 'white', opacity: '.9', borderRadius: '6px' }}
+                variant="filled"
+                type="text"
+                required
+                fullWidth
+                disabled={!carMake}
+                value={carModel}
+                onChange={(e) => setCarModel(e.target.innerText)}
+                id="model"
+                autoComplete
+                disablePortal
+                options={carMake ? carData[carMake].map((entry) => entry.model) : []}
+                // TODO: add fallback for when carMake is undefined
+                renderInput={(params) => <TextField {...params} name="model" label="Model" />}
+              />
+
+
             </Grid>
             <Grid item xs={12} sm={6}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
