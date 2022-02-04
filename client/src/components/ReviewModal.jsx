@@ -25,7 +25,7 @@ const style = {
 };
 
 export default function ReviewModal({ handleClose, open, prof }) {
-  const { addReview } = useContext(AuthContext);
+  const { addReview, setToastShowing, setToastMessage, setToastType } = useContext(AuthContext);
   const [value, setValue] = useState(0);
   const { userId } = prof;
 
@@ -47,6 +47,9 @@ export default function ReviewModal({ handleClose, open, prof }) {
       name: `${firstName} ${lastName}`,
     };
     addReview(review);
+    setToastType('success');
+    setToastMessage('Your review was posted');
+    setToastShowing(true);
     handleClose();
   };
   return (
