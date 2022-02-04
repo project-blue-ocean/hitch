@@ -25,7 +25,9 @@ function PostRide() {
   const [carModel, setCarModel] = useState('');
 
   const navigate = useNavigate();
-  const { currentUser, addRide } = useContext(AuthContext);
+  const {
+    currentUser, addRide, setToastShowing, setToastMessage, setToastType,
+  } = useContext(AuthContext);
   const handleFormOnSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -41,6 +43,9 @@ function PostRide() {
     };
     addRide(formToSend)
       .then((ride) => {
+        setToastType('success');
+        setToastMessage('Your ride was posted');
+        setToastShowing(true);
         navigate('/');
       })
       .catch((err) => console.log(err));
@@ -105,7 +110,6 @@ function PostRide() {
                   const selectedMake = e.target.innerText;
                   setCarModel('');
                   setCarMake(selectedMake);
-                  console.log('trigggered')
                 }}
                 disablePortal
                 options={Object.keys(carData)}
@@ -129,7 +133,6 @@ function PostRide() {
                 // TODO: add fallback for when carMake is undefined
                 renderInput={(params) => <TextField {...params} name="model" label="Model" />}
               />
-
 
             </Grid>
             <Grid item xs={12} sm={6}>

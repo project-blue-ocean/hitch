@@ -31,6 +31,7 @@ function SignUp() {
   // Context
   const {
     signup, addProfile, updateProfile, uploadAvatar,
+    setToastShowing, setToastMessage, setToastType,
   } = useContext(AuthContext);
 
   // Methods
@@ -69,8 +70,14 @@ function SignUp() {
         userId: user.uid, name, image: { url: photoURL }, age, bio, riderRating: 0, driverRating: 0,
       });
       await updateProfile({ displayName: name, photoURL });
+      setToastType('success');
+      setToastMessage('Your account was created');
+      setToastShowing(true);
       await navigate('/login');
     } catch (err) {
+      setToastType('error');
+      setToastMessage(err.message);
+      setToastShowing(true);
       switch (err.code) {
         case 'auth/email-already-in-use':
           setError(`Email address ${email} already in use.`);

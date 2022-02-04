@@ -12,6 +12,7 @@ import PostRide from './components/PostRide.jsx';
 import Profile from './components/Profile.jsx';
 import SignUp from './components/SignUp.jsx';
 import Login from './components/Login.jsx';
+import Toast from './components/Toast.jsx';
 import { AuthProvider } from './contexts/index.jsx';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
     <Router>
       <AuthProvider>
         <MenuOption />
+        <Toast />
         <Routes>
           {/* TODO: Wrap private pages in <PrivateRoute></PrivateRoute> */}
           <Route path="/login" element={<Login />} />

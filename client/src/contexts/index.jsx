@@ -22,7 +22,6 @@ import {
   onAuthStateChanged,
   updateProfile as updateprofile,
 } from 'firebase/auth';
-import _ from 'lodash';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { auth, db, storage } from '../firebase';
 
@@ -36,6 +35,9 @@ export const AuthContext = React.createContext(null);
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
+  const [toastShowing, setToastShowing] = useState(false);
+  const [toastMessage, setToastMessage] = useState('Success!');
+  const [toastType, setToastType] = useState('success');
 
   // Authorization
   function signup(email, password) {
@@ -160,6 +162,12 @@ export function AuthProvider({ children }) {
     getMessages,
     getContacts,
     getProfile,
+    setToastShowing,
+    setToastMessage,
+    setToastType,
+    toastShowing,
+    toastMessage,
+    toastType,
   };
 
   return (
