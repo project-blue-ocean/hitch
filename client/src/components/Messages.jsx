@@ -70,7 +70,7 @@ function Messages() {
           }
         });
     }
-  }, [usersContacted]);
+  }, []);
 
   useEffect(() => {
     if (userContactedId !== null) {
