@@ -23,6 +23,7 @@ function Messages() {
   const [usersContacted, setUsersContacted] = useState([]);
   const [messages, setMessages] = useState([]);
   const [userContactedId, setUserContactedId] = useState(null);
+  const [message, setMessage] = useState('');
   const {
     currentUser,
     addMessage,
@@ -96,9 +97,8 @@ function Messages() {
 
   const sendMessage = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
     const messageToSend = {
-      message: data.get('message'),
+      message: message,
       senderId: currentUser.uid,
       chatd: [userContactedId + currentUser.uid, currentUser.uid + userContactedId],
       time: new Date(),
@@ -106,6 +106,7 @@ function Messages() {
     addMessage(messageToSend)
       // eslint-disable-next-line no-console
       .catch((err) => console.log(err));
+      setMessage('');
   };
 
   const scrollToBottom = () => {
@@ -154,7 +155,15 @@ function Messages() {
             <Divider />
             <Grid container component="form" onSubmit={sendMessage} style={{ padding: '10px'}}>
               <Grid item xs={10}>
-                <TextField id="message" name="message" autoComplete="off" required fullWidth />
+                <TextField
+                  id="message"
+                  name="message"
+                  autoComplete="off"
+                  value={message}
+                  onChange={(e) => { setMessage(e.target.value); }}
+                  required
+                  fullWidth
+                />
               </Grid>
               <Grid item xs={2} align="right">
                 <Fab type="submit" color="primary" aria-label="add">Send</Fab>
