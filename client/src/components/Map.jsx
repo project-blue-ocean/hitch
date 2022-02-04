@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import axios from 'axios';
+import Box from '@mui/material/Box';
 import mapboxgl from '!mapbox-gl';
 // eslint-disable-line import/no-webpack-loader-syntax
 const config = require('../../../config');
@@ -15,7 +16,7 @@ export default function Map({ location, startCoords, endCoords }) {
         container: mapContainer.current,
         style: 'mapbox://styles/mapbox/streets-v11',
         center: [location.longitude, location.latitude],
-        zoom: 9,
+        zoom: 12,
       });
     } else if (endCoords.longitude === 0) {
       map.current = new mapboxgl.Map({
@@ -36,7 +37,7 @@ export default function Map({ location, startCoords, endCoords }) {
         container: mapContainer.current,
         style: 'mapbox://styles/mapbox/streets-v11',
         center: [(startCoords.longitude + endCoords.longitude) / 2, (startCoords.latitude + endCoords.latitude) / 2],
-        zoom: 1,
+        zoom: 2,
       });
       const bounds = [
         [endCoords.longitude, endCoords.latitude],
@@ -84,12 +85,11 @@ export default function Map({ location, startCoords, endCoords }) {
 
   return (
     <div>
-      <div
+      <Box
         ref={mapContainer}
         style={{
-          width: '100vw',
-          height: '70vw',
-          maxHeight: '400px',
+          width: 'auto',
+          height: '400px',
         }}
         className="map-container"
       />
