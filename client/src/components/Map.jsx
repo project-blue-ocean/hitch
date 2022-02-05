@@ -1,9 +1,12 @@
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/no-webpack-loader-syntax */
+/* eslint-disable react/prop-types */
 import React, { useRef, useEffect } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import axios from 'axios';
 import Box from '@mui/material/Box';
 import mapboxgl from '!mapbox-gl';
-// eslint-disable-line import/no-webpack-loader-syntax
+
 const config = require('../../../config');
 
 export default function Map({ location, startCoords, endCoords }) {
@@ -36,14 +39,16 @@ export default function Map({ location, startCoords, endCoords }) {
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
         style: 'mapbox://styles/mapbox/streets-v11',
-        center: [(startCoords.longitude + endCoords.longitude) / 2, (startCoords.latitude + endCoords.latitude) / 2],
+        center: [
+          (startCoords.longitude + endCoords.longitude) / 2,
+          (startCoords.latitude + endCoords.latitude) / 2],
         zoom: 2,
       });
       const bounds = [
         [endCoords.longitude, endCoords.latitude],
         [startCoords.longitude, startCoords.latitude],
       ];
-      map.current.fitBounds(bounds, {padding: 50});
+      map.current.fitBounds(bounds, { padding: 50 });
       const response = await axios.get('/directions', {
         params: {
           startCoords, endCoords,
