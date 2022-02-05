@@ -47,4 +47,37 @@ ADD GIF HERE
 - [Aaron Finsrud](https://github.com/AaronFinsrud)
 
 ### File Structure
-ADD FILE STRUCTURE
+├── client
+    ├── dist
+        ├── bundle.js
+        ├── index.html
+    ├── src
+      ├── assets
+      ├── components
+          ├── Login.jsx
+          ├── Main.jsx
+          ├── Map.jsx
+          ├── MenuOption.jsx
+          ├── Message.jsx
+          ├── PostRide.jsx
+          ├── Profile.jsx
+          ├── ReviewCard.jsx
+          ├── ReviewModal.jsx
+          ├── SignUp.jsx
+          ├── Toast.jsx
+          ├── UserContacted.jsx
+      ├── contexts
+          ├── index.jsx
+      ├── firebase
+          ├── index.js
+          ├── PrivateRoute.jsx
+      ├── App.css
+      ├── App.jsx
+├── diagrams
+    ├── ComponentTree.pgn
+    ├── DataFlow.png
+    ├── Views.png
+├── functions
+├── server
+    ├── index.js
+
