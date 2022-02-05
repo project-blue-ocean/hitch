@@ -13,8 +13,9 @@ import {
   Fab,
   Container,
   Box,
+  Button,
 } from '@material-ui/core';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import Message from './Message.jsx';
 import UserContacted from './UserContacted.jsx';
 import { AuthContext } from '../contexts/index.jsx';
@@ -23,6 +24,7 @@ function Messages() {
   const [usersContacted, setUsersContacted] = useState([]);
   const [messages, setMessages] = useState([]);
   const [userContactedId, setUserContactedId] = useState(null);
+  const [userName, setUserName] = useState(null);
   const [message, setMessage] = useState('');
   const {
     currentUser,
@@ -119,8 +121,9 @@ function Messages() {
     }
   }, [messages]);
 
-  const userContactedOnClick = (id) => {
-    setUserContactedId(id);
+  const userContactedOnClick = (userClicked) => {
+    setUserContactedId(userClicked.userId);
+    setUserName(userClicked.name);
   };
 
   return (
@@ -133,7 +136,7 @@ function Messages() {
       >
         <Grid container component={Paper} style={{ width: '100%' }}>
           <Grid item xs={3} style={{ borderRight: '1px solid #e0e0e0' }}>
-            <List>
+            <List style={{ height: '70vh', overflowY: 'auto' }}>
               {usersContacted.map((user) => (
                 <UserContacted
                   user={user}
@@ -150,7 +153,9 @@ function Messages() {
               {messages.map((message, index) => (
                 <Message message={message} key={index.toString()} userId={currentUser.uid} />
               ))}
-              <div ref={messagesEndRef} />
+              <Link to="/my-profile" state={{ id: userContactedId }} style={{ textDecoration: 'none' }}>
+                <Button ref={messagesEndRef}> Go to {userName} profile </Button>
+              </Link>
             </List>
             <Divider />
             <Grid container component="form" onSubmit={sendMessage} style={{ padding: '10px'}}>

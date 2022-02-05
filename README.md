@@ -12,16 +12,19 @@ ADD HEADER IMAGE
 Hitch is a responsive web app for rideshares and carpooling.
 
 ### Demo
-#### COMPONENT 1
+#### Signup
+![signup](https://user-images.githubusercontent.com/52397472/152586006-23051343-780d-4205-85dd-82963164e28f.gif)
+
+#### Search Rides
+![rides](https://user-images.githubusercontent.com/52397472/152585942-62d31d64-9924-45ec-aafb-06d2fb6b1032.gif)
+
+#### Post a Ride
+![postride](https://user-images.githubusercontent.com/52397472/152585921-b1018342-882d-455f-8609-8d8f1ac782cb.gif)
+
+#### Live Chat
 ADD GIF HERE
 
-#### COMPONENT 2
-ADD GIF HERE
-
-#### COMPONENT 3
-ADD GIF HERE
-
-#### COMPONENT 4
+#### User Profiles
 ADD GIF HERE
 
 ### Installation and Setup

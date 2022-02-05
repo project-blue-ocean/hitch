@@ -10,7 +10,7 @@ import {
 function UserContacted({ user, userContactedOnClick }) {
   const imageToRender = user.image ? user.image : '';
   return (
-    <ListItem button onClick={() => userContactedOnClick(user.userId)}>
+    <ListItem button onClick={() => userContactedOnClick(user)}>
       <ListItemIcon>
         <Avatar alt={user.senderName} src={imageToRender} />
       </ListItemIcon>
