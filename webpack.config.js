@@ -10,6 +10,7 @@ module.exports = {
     filename: 'bundle.js',
     path: DIST_DIR,
   },
+  devtool: 'source-map',
   plugins: [
     new HtmlWebpackPlugin({
       favicon: './client/src/assets/favicon.ico',
