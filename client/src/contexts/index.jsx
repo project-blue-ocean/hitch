@@ -14,6 +14,7 @@ import {
   where,
   orderBy,
   arrayUnion,
+  serverTimestamp,
 } from '@firebase/firestore';
 import {
   createUserWithEmailAndPassword,
@@ -73,9 +74,8 @@ export function AuthProvider({ children }) {
   }
 
   function updateUsersContacted(id, params) {
-    const {name, userId, image} = params;
     const usersContactedDoc = doc(db, 'profile', id);
-    return updateDoc(usersContactedDoc, { usersContacted: arrayUnion(params)});
+    return updateDoc(usersContactedDoc, { usersContacted: arrayUnion(params) });
   }
 
   function getUser(params) {
@@ -95,7 +95,7 @@ export function AuthProvider({ children }) {
         .docs
         .map((ride) => ride.data())
         .filter((ride) => !destination || ride.destination === destination));
-        // TODO: handle queries w/ no start param
+    // TODO: handle queries w/ no start param
   }
 
   // Reviews
@@ -117,6 +117,8 @@ export function AuthProvider({ children }) {
 
   // Messages
   function addMessage(body) {
+    // eslint-disable-next-line no-param-reassign
+    body.time = serverTimestamp();
     return addDoc(messagesCollectionReference, body);
   }
 
@@ -125,7 +127,9 @@ export function AuthProvider({ children }) {
     return onSnapshot(q, (querySnapshot) => {
       const messages = [];
       querySnapshot.forEach((docs) => {
-        messages.push(docs.data());
+        const message = docs.data();
+        message.time = message.time === null ? new Date() : message.time.toDate();
+        messages.push(message);
       });
       callback(messages);
     });
