@@ -1,5 +1,6 @@
+/* eslint-disable no-restricted-globals */
 import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
@@ -15,13 +16,11 @@ import ReviewModal from './ReviewModal.jsx';
 import ReviewCard from './ReviewCard.jsx';
 
 function Profile() {
-  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [profile, setProfile] = useState({});
   const [reviews, setReviews] = useState([]);
   const [driverRating, setDriverRating] = useState(0);
   const [riderRating, setRiderRating] = useState(0);
-
   const { getProfile, currentUser, getReviews } = useContext(AuthContext);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -47,10 +46,10 @@ function Profile() {
         let riderCount = 0;
         userReviews.forEach((review) => {
           if (review.driver === 'on') {
-            driver += parseInt(review.starRating);
+            driver += parseInt(review.starRating, 10);
             driverCount += 1;
           } else {
-            rider += parseInt(review.starRating);
+            rider += parseInt(review.starRating, 10);
             riderCount += 1;
           }
         });
@@ -132,6 +131,7 @@ function Profile() {
             NextIcon={<NavigateNextIcon />}
             PrevIcon={<NavigateBeforeIcon />}
           >
+            {/* eslint-disable-next-line react/no-array-index-key */}
             {reviews.map((review, i) => (<ReviewCard key={i} review={review} />))}
           </Carousel>
         </Box>
