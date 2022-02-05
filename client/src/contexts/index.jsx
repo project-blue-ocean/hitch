@@ -95,7 +95,7 @@ export function AuthProvider({ children }) {
         .docs
         .map((ride) => ride.data())
         .filter((ride) => !destination || ride.destination === destination));
-        // TODO: handle queries w/ no start param
+    // TODO: handle queries w/ no start param
   }
 
   // Reviews
