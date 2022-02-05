@@ -18,8 +18,8 @@ ADD GIF HERE
 #### COMPONENT 2
 ADD GIF HERE
 
-#### COMPONENT 3
-ADD GIF HERE
+#### Live Chat
+![messages](https://user-images.githubusercontent.com/75865828/152659990-30b69a96-c4cb-4887-b3e3-8eab35b58a3f.gif)
 
 #### COMPONENT 4
 ADD GIF HERE
