@@ -4,12 +4,11 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Rating from '@mui/material/Rating';
 import TextField from '@mui/material/TextField';
-import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Modal from '@mui/material/Modal';
-import Grid from '@mui/material/Grid';
-
+import Radio from '@mui/material/Radio';
+import FormLabel from '@mui/material/FormLabel';
+import RadioGroup from '@mui/material/RadioGroup';
 import { AuthContext } from '../contexts/index.jsx';
 
 const style = {
@@ -25,7 +24,9 @@ const style = {
 };
 
 export default function ReviewModal({ handleClose, open, prof }) {
-  const { addReview, setToastShowing, setToastMessage, setToastType } = useContext(AuthContext);
+  const {
+    addReview, setToastShowing, setToastMessage, setToastType, currentUser,
+  } = useContext(AuthContext);
   const [value, setValue] = useState(0);
   const { userId } = prof;
 
@@ -34,8 +35,6 @@ export default function ReviewModal({ handleClose, open, prof }) {
     const data = new FormData(event.currentTarget);
     const feedback = data.get('feedback');
     const rating = data.get('half-rating');
-    const firstName = data.get('firstName');
-    const lastName = data.get('lastName');
     const driverStatus = data.get('wasDriver');
     const rideDate = new Date();
     const review = {
@@ -44,7 +43,7 @@ export default function ReviewModal({ handleClose, open, prof }) {
       date: rideDate,
       message: feedback,
       receiverId: userId,
-      name: `${firstName} ${lastName}`,
+      name: currentUser.displayName,
     };
 
     addReview(review);
@@ -74,40 +73,22 @@ export default function ReviewModal({ handleClose, open, prof }) {
           autoComplete="off"
           onSubmit={handleSubmit}
         >
-          <Grid item xs={12} sm={6}>
-            <TextField
-              autoComplete="given-name"
-              name="firstName"
-              required
-              fullWidth
-              id="firstName"
-              label="First Name"
-              autoFocus
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              required
-              fullWidth
-              id="lastName"
-              label="Last Name"
-              name="lastName"
-              autoComplete="family-name"
-            />
-          </Grid>
-          <div>
-            {' '}
-            Was
-            {' '}
-            {prof.name}
-            {' '}
-            the rider or the driver?
-          </div>
-          <FormGroup aria-label="position" row required>
-            <FormControlLabel control={<Checkbox name="wasRider" />} label="Rider" labelPlacement="top" />
-            <FormControlLabel control={<Checkbox name="wasDriver" />} label="Driver" labelPlacement="top" />
-          </FormGroup>
+          <FormLabel id="rider-driver-radio-buttons-group">
+            {`Was ${prof.name} the rider or driver?`}
+          </FormLabel>
+          <RadioGroup
+            aria-labelledby="rider-driver-radio-buttons-group"
+            defaultValue="on"
+            name="wasDriver"
+          >
+            <FormControlLabel value="on" control={<Radio />} label="Driver" />
+            <FormControlLabel value="off" control={<Radio />} label="Rider" />
+          </RadioGroup>
+          <FormLabel id="star-rating">
+            {`Was ${prof.name} the rider or driver?`}
+          </FormLabel>
           <Rating
+            aria-labelledby="star-rating"
             name="half-rating"
             precision={0.5}
             size="large"
@@ -138,5 +119,4 @@ export default function ReviewModal({ handleClose, open, prof }) {
       </Box>
     </Modal>
   );
-};
-
+}
