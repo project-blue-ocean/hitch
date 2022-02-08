@@ -12,16 +12,19 @@ ADD HEADER IMAGE
 Hitch is a responsive web app for rideshares and carpooling.
 
 ### Demo
-#### COMPONENT 1
-ADD GIF HERE
+#### Signup
+![signup](https://user-images.githubusercontent.com/52397472/152586006-23051343-780d-4205-85dd-82963164e28f.gif)
 
-#### COMPONENT 2
-ADD GIF HERE
+#### Search Rides
+![rides](https://user-images.githubusercontent.com/52397472/152585942-62d31d64-9924-45ec-aafb-06d2fb6b1032.gif)
+
+#### Post a Ride
+![postride](https://user-images.githubusercontent.com/52397472/152585921-b1018342-882d-455f-8609-8d8f1ac782cb.gif)
 
 #### Live Chat
 ![messages](https://user-images.githubusercontent.com/75865828/152659990-30b69a96-c4cb-4887-b3e3-8eab35b58a3f.gif)
 
-#### COMPONENT 4
+#### User Profiles
 ADD GIF HERE
 
 ### Installation and Setup
@@ -44,4 +47,37 @@ ADD GIF HERE
 - [Aaron Finsrud](https://github.com/AaronFinsrud)
 
 ### File Structure
-ADD FILE STRUCTURE
+├── client
+    ├── dist
+        ├── bundle.js
+        ├── index.html
+    ├── src
+      ├── assets
+      ├── components
+          ├── Login.jsx
+          ├── Main.jsx
+          ├── Map.jsx
+          ├── MenuOption.jsx
+          ├── Message.jsx
+          ├── PostRide.jsx
+          ├── Profile.jsx
+          ├── ReviewCard.jsx
+          ├── ReviewModal.jsx
+          ├── SignUp.jsx
+          ├── Toast.jsx
+          ├── UserContacted.jsx
+      ├── contexts
+          ├── index.jsx
+      ├── firebase
+          ├── index.js
+          ├── PrivateRoute.jsx
+      ├── App.css
+      ├── App.jsx
+├── diagrams
+    ├── ComponentTree.pgn
+    ├── DataFlow.png
+    ├── Views.png
+├── functions
+├── server
+    ├── index.js
+

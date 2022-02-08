@@ -46,6 +46,7 @@ export default function ReviewModal({ handleClose, open, prof }) {
       receiverId: userId,
       name: `${firstName} ${lastName}`,
     };
+
     addReview(review);
     setToastType('success');
     setToastMessage('Your review was posted');
