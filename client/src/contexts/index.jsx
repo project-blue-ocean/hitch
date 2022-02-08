@@ -73,6 +73,7 @@ export function AuthProvider({ children }) {
     return getDoc(profRef);
   }
 
+  // UsersContacted put request
   function updateUsersContacted(id, params) {
     const usersContactedDoc = doc(db, 'profile', id);
     return updateDoc(usersContactedDoc, { usersContacted: arrayUnion(params) });
@@ -115,13 +116,14 @@ export function AuthProvider({ children }) {
       });
   }
 
-  // Messages
+  // Messages post request
   function addMessage(body) {
     // eslint-disable-next-line no-param-reassign
     body.time = serverTimestamp();
     return addDoc(messagesCollectionReference, body);
   }
 
+  // Messages get request and listen for changes on Database
   function getMessages(params, callback) {
     const q = query(collection(db, 'messages'), orderBy('time'), where('chatd', 'array-contains', params));
     return onSnapshot(q, (querySnapshot) => {
