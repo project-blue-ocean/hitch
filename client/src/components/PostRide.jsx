@@ -50,7 +50,7 @@ function PostRide() {
       })
       .catch(() => {
         setToastType('error');
-        setToastMessage('It wasn\'t possible to post your message');
+        setToastMessage('It wasn\'t possible to post your ride');
         setToastShowing(true);
       });
   };
