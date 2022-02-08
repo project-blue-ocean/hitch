@@ -24,8 +24,8 @@ Hitch is a responsive web app for rideshares and carpooling.
 #### Live Chat
 ![messages](https://user-images.githubusercontent.com/75865828/152659990-30b69a96-c4cb-4887-b3e3-8eab35b58a3f.gif)
 
-#### User Profiles
-ADD GIF HERE
+#### User Profile/Reviews
+![reviews](https://user-images.githubusercontent.com/52397472/152658373-a645e02b-7b1d-43de-91cf-093a9fc84cba.gif)
 
 ### Installation and Setup
 1. Clone down the repo `$ git clone https://github.com/project-blue-ocean/front-end.git`
