@@ -42,7 +42,11 @@ function Messages() {
   const location = useLocation();
   const profile = location.state;
 
+  // component did update - usersContacted
   useEffect(() => {
+    // if user is trying to message a specif person (came to messages from a ride post),
+    // check if user messaged that person before by checking their profile against list of
+    // usersContacted
     if (didMount.current && !AddedprofileToUsersContacted.current && profile) {
       let userAlreadyContacted = false;
       for (let i = 0; i < usersContacted.length; i += 1) {
@@ -75,6 +79,7 @@ function Messages() {
     }
   }, [usersContacted]);
 
+  // component did mount - get list of usersContacted from database
   useEffect(() => {
     if (!didMount.current) {
       didMount.current = true;
@@ -94,6 +99,7 @@ function Messages() {
     }
   }, []);
 
+  // component did update - userContactedId
   // eslint-disable-next-line consistent-return
   useEffect(() => {
     if (userContactedId !== null) {
@@ -101,6 +107,7 @@ function Messages() {
         setMessages(updatedMessages);
       });
       return () => {
+        // stop firestore for listening for messages between users
         unsubscribe();
       };
     }
