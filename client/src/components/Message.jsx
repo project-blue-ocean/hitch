@@ -8,8 +8,6 @@ import {
 import Moment from 'moment';
 
 function Message({ message, userId }) {
-  const time = message.time ? message.time.toDate() : message.time;
-
   const alignOption = message.senderId === userId ? 'right' : 'left';
   return (
     <ListItem>
@@ -18,7 +16,7 @@ function Message({ message, userId }) {
           <ListItemText align={alignOption} primary={message.message} />
         </Grid>
         <Grid item xs={12}>
-          <ListItemText align={alignOption} secondary={Moment(time).format('lll')} />
+          <ListItemText align={alignOption} secondary={Moment(message.time).format('lll')} />
         </Grid>
       </Grid>
     </ListItem>

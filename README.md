@@ -22,7 +22,7 @@ Hitch is a responsive web app for rideshares and carpooling.
 ![postride](https://user-images.githubusercontent.com/52397472/152585921-b1018342-882d-455f-8609-8d8f1ac782cb.gif)
 
 #### Live Chat
-ADD GIF HERE
+![messages](https://user-images.githubusercontent.com/75865828/152659990-30b69a96-c4cb-4887-b3e3-8eab35b58a3f.gif)
 
 #### User Profiles
 ADD GIF HERE

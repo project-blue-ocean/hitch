@@ -16,8 +16,8 @@ import {
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import Autocomplete from '@mui/material/Autocomplete';
 import { AuthContext } from '../contexts/index.jsx';
-import UScityNames from '../assets/cities.js';
-import carData from '../assets/carData.js';
+import UScityNames from '../assets/cities';
+import carData from '../assets/carData';
 
 function PostRide() {
   const [date, setDate] = useState(new Date());
@@ -42,13 +42,17 @@ function PostRide() {
       driverId: currentUser.uid,
     };
     addRide(formToSend)
-      .then((ride) => {
+      .then(() => {
         setToastType('success');
         setToastMessage('Your ride was posted');
         setToastShowing(true);
         navigate('/');
       })
-      .catch((err) => console.log(err));
+      .catch(() => {
+        setToastType('error');
+        setToastMessage('It wasn\'t possible to post your ride');
+        setToastShowing(true);
+      });
   };
   return (
     <Container component="main" maxWidth="xs">

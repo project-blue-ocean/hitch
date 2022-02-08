@@ -24,7 +24,7 @@ function Messages() {
   const [usersContacted, setUsersContacted] = useState([]);
   const [messages, setMessages] = useState([]);
   const [userContactedId, setUserContactedId] = useState(null);
-  const [userName, setUserName] = useState(null);
+  const [userName, setUserName] = useState('');
   const [message, setMessage] = useState('');
   const {
     currentUser,
@@ -32,6 +32,9 @@ function Messages() {
     getMessages,
     getProfile,
     updateUsersContacted,
+    setToastShowing,
+    setToastMessage,
+    setToastType,
   } = useContext(AuthContext);
   const didMount = useRef(false);
   const AddedprofileToUsersContacted = useRef(false);
@@ -60,10 +63,14 @@ function Messages() {
             updateUsersContacted(newContact.userId, userContact)
               .then(() => {
                 AddedprofileToUsersContacted.current = true;
-                setUsersContacted(usersContacted => [...usersContacted, newContact]);
+                setUsersContacted((usersContactedPrior) => [...usersContactedPrior, newContact]);
               });
           })
-          .catch((err) => console.log(err));
+          .catch(() => {
+            setToastType('error');
+            setToastMessage('An error occurred while loading messages');
+            setToastShowing(true);
+          });
       }
     }
   }, [usersContacted]);
@@ -76,6 +83,7 @@ function Messages() {
       }
       getProfile(currentUser.uid)
         .then((result) => {
+          // eslint-disable-next-line no-shadow
           const { usersContacted } = result.data();
           if (usersContacted === undefined) {
             setUsersContacted([]);
@@ -86,6 +94,7 @@ function Messages() {
     }
   }, []);
 
+  // eslint-disable-next-line consistent-return
   useEffect(() => {
     if (userContactedId !== null) {
       const unsubscribe = getMessages(userContactedId + currentUser.uid, (updatedMessages) => {
@@ -100,15 +109,17 @@ function Messages() {
   const sendMessage = (event) => {
     event.preventDefault();
     const messageToSend = {
-      message: message,
+      message,
       senderId: currentUser.uid,
       chatd: [userContactedId + currentUser.uid, currentUser.uid + userContactedId],
-      time: new Date(),
     };
     addMessage(messageToSend)
-      // eslint-disable-next-line no-console
-      .catch((err) => console.log(err));
-      setMessage('');
+      .catch(() => {
+        setToastType('error');
+        setToastMessage('An error occurred while loading messages');
+        setToastShowing(true);
+      });
+    setMessage('');
   };
 
   const scrollToBottom = () => {
@@ -150,15 +161,15 @@ function Messages() {
           && (
           <Grid item xs={9}>
             <List style={{ height: '70vh', overflowY: 'auto' }}>
-              {messages.map((message, index) => (
-                <Message message={message} key={index.toString()} userId={currentUser.uid} />
+              {messages.map((currentMessage, index) => (
+                <Message message={currentMessage} key={index.toString()} userId={currentUser.uid} />
               ))}
               <Link to="/my-profile" state={{ id: userContactedId }} style={{ textDecoration: 'none' }}>
-                <Button ref={messagesEndRef}> Go to {userName} profile </Button>
+                <Button ref={messagesEndRef}>{`Go to ${userName} profile`}</Button>
               </Link>
             </List>
             <Divider />
-            <Grid container component="form" onSubmit={sendMessage} style={{ padding: '10px'}}>
+            <Grid container component="form" onSubmit={sendMessage} style={{ padding: '10px' }}>
               <Grid item xs={10}>
                 <TextField
                   id="message"
